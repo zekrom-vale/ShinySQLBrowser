@@ -1,0 +1,175 @@
+---
+
+tables:
+    cook:
+        tab:
+            title: CookLog # The title and identifier for the tabPanel
+            # id will be fetched from outer
+            value: null
+            icon: null
+        con: CookLog # Passed through get()
+        name: cook
+        id: null
+        types: null
+        opt: null
+        rows:
+            ID:
+                width: 80px
+                input: <input type="number" disabled>
+            Date:
+                width: 120px
+            Time:
+                width: 120px
+            ItemID:
+                width: 240px
+                input: 
+                    table: items
+                    key: ID
+                    val: Item
+            Temp:
+                width: 100px
+            Person:
+                width: 140px
+                input:
+                    con: Work # Passed through get()
+                    table: People
+                    key: ID
+                    val: Name
+            Comment:
+                width: 300px
+        js: null
+        tbl: null # Passed through get() local function
+        keys: ID
+
+
+    cookitems:
+        tab:
+            title: CookItems # The title and identifier for the tabPanel
+            # id will be fetched from outer
+            value: null
+            icon: null
+        con: CookLog # Passed through get()
+        name: items
+        id: CookItems
+        types: null
+        opt: null
+        rows:
+            ID:
+                width: 80px
+                input: <input type="number" disabled>
+            Item:
+                width: 240px
+            MinTemp:
+                width: 100px
+            Minutes:
+                width: 120px
+            Method:
+                width: 120px
+                input:
+                    table: methods
+                    key: ID
+                    val: Method
+            Comment:
+                width: 300px
+        js: null
+        tbl: null # Passed through get() local function
+        keys: ID
+
+    people:
+        tab:
+            title: People # The title and identifier for the tabPanel
+            # id will be fetched from outer
+            value: null
+            icon: null
+        con: CookLog # Passed through get()
+        name: items
+        id: People
+        types: null
+        opt: null
+        rows:
+            ID:
+                width: 80px
+                input: <input type="number" disabled>
+            Name:
+                width: 140px
+            Active: 
+                width: 80px
+            Comment:
+                width: 300px
+        js: null
+        tbl: null # Passed through get() local function
+        keys: ID
+
+
+
+
+
+    salad:
+        tab:
+            title: SaladLog # The title and identifier for the tabPanel
+            # id will be fetched from outer
+            value: null
+            icon: null
+        con: SaladLog # Passed through get()
+        name: salad
+        id: SaladItems
+        types: null
+        opt: null
+        rows: 
+            ID:
+                width: 80px
+                input: <input type="number" disabled>
+            Date:
+                width: 120px
+            Time:
+                width: 120px
+            SaladID:
+                width: 240px
+                input:
+                    table: items
+                    key: ID
+                    val: Salad
+            MeatAge:
+                width: 100px
+            Expires:
+                width: 120px
+            Ack:
+                width: 80px
+            Person:
+                width: 140px
+                input:
+                    con: Work
+                    table: people
+                    key: ID
+                    val: Name
+            Comment:
+                width: 300px
+        js: null
+        tbl: null # Passed through get() local function
+        keys: ID
+        
+    saladitems:
+        tab:
+            title: SaladItems # The title and identifier for the tabPanel
+            # id will be fetched from outer
+            value: null
+            icon: null
+        con: SaladLog # Passed through get()
+        name: items
+        id: null
+        types: null
+        opt: null
+        rows:
+            ID:
+                width: 80px
+                input: <input type="number" disabled>
+            Salad:
+                width: 240px
+            Life:
+                width: 80px
+            Comment:
+                width: 300px
+            
+        js: null
+        tbl: null # Passed through get() local function
+        keys: ID
