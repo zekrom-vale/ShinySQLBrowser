@@ -48,6 +48,23 @@ function evalName(name, sep="."){
 	return v;
 }
 
+function escapeHTML(unsafe) {
+	return unsafe.replace(/[&<"'>]/g, m=>{
+		switch(m){
+			case '&':
+				return '&amp;';
+			case '<':
+				return '&lt;';
+			case '>':
+				return '&gt;';
+			case '"':
+				return '&quot;';
+			case "'":
+				return '&#039;';
+		}
+	});
+}
+
 function write(tbl, el, val){
 		el.data("val", val);
 		render(tbl, el, val);
@@ -68,7 +85,7 @@ function render(tbl, el, val=undefined){
 			else txt=typefun[type](val);
 		}
 		else txt=typefun[col](val);
-		el.append($(`<div>${txt}</div>`));
+		el.append($(`<div>${escapeHTML(txt)}</div>`));
 	}
 }
 
