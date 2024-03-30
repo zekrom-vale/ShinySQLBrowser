@@ -1,0 +1,177 @@
+/*\.([a-zA-Z-_]+) .\1, \n.\1*/
+@use "sass:math";
+.cook-ID div,
+.cook-ID input,
+.cook-ID select {
+  width: 80px;
+}
+
+.cook-Date div,
+.cook-Date input,
+.cook-Date select {
+  width: 120px;
+}
+
+.cook-Time div,
+.cook-Time input,
+.cook-Time select {
+  width: 120px;
+}
+
+.cook-ItemID div,
+.cook-ItemID input,
+.cook-ItemID select {
+  width: 240px;
+}
+
+.cook-Temp div,
+.cook-Temp input,
+.cook-Temp select {
+  width: 100px;
+}
+
+.cook-Person div,
+.cook-Person input,
+.cook-Person select {
+  width: 140px;
+}
+
+.cook-Comment div,
+.cook-Comment input,
+.cook-Comment select {
+  width: 300px;
+}
+
+.items-ID div,
+.items-ID input,
+.items-ID select {
+  width: 80px;
+}
+
+.items-Item div,
+.items-Item input,
+.items-Item select {
+  width: 240px;
+}
+
+.items-MinTemp div,
+.items-MinTemp input,
+.items-MinTemp select {
+  width: 100px;
+}
+
+.items-Minutes div,
+.items-Minutes input,
+.items-Minutes select {
+  width: 120px;
+}
+
+.items-Method div,
+.items-Method input,
+.items-Method select {
+  width: 120px;
+}
+
+.items-Comment div,
+.items-Comment input,
+.items-Comment select {
+  width: 300px;
+}
+
+.salad-ID div,
+.salad-ID input,
+.salad-ID select {
+  width: 80px;
+}
+
+.salad-Date div,
+.salad-Date input,
+.salad-Date select {
+  width: 120px;
+}
+
+.salad-Time div,
+.salad-Time input,
+.salad-Time select {
+  width: 120px;
+}
+
+.salad-SaladID div,
+.salad-SaladID input,
+.salad-SaladID select {
+  width: 240px;
+}
+
+.salad-MeatAge div,
+.salad-MeatAge input,
+.salad-MeatAge select {
+  width: 100px;
+}
+
+.salad-Expires div,
+.salad-Expires input,
+.salad-Expires select {
+  width: 120px;
+}
+
+.salad-Ack div,
+.salad-Ack input,
+.salad-Ack select {
+  width: 80px;
+}
+
+.salad-Person div,
+.salad-Person input,
+.salad-Person select {
+  width: 140px;
+}
+
+.salad-Comment div,
+.salad-Comment input,
+.salad-Comment select {
+  width: 300px;
+}
+
+.items-Salad div,
+.items-Salad input,
+.items-Salad select {
+  width: 240px;
+}
+
+.items-Life div,
+.items-Life input,
+.items-Life select {
+  width: 80px;
+}
+
+.people-ID div,
+.people-ID input,
+.people-ID select {
+  width: 80px;
+}
+
+.people-Name div,
+.people-Name input,
+.people-Name select {
+  width: 140px;
+}
+
+.people-Active div,
+.people-Active input,
+.people-Active select {
+  width: 80px;
+}
+
+.people-Comment div,
+.people-Comment input,
+.people-Comment select {
+  width: 300px;
+}
+
+td {
+  font-size: 20px;
+}
+
+tr {
+  height: 52px;
+}
