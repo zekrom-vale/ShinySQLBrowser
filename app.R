@@ -16,6 +16,7 @@ library(shiny)
 library(shinyjs)
 
 source("table.R", local = TRUE, keep.source = TRUE)
+source("container.R", local = TRUE, keep.source = TRUE)
 
 user= 'root'
 password="RayLVM"
@@ -41,33 +42,13 @@ Work <- dbPool(
   dbname ='Work'
 )
 
-tables = yaml::read_yaml("config.yaml")$tables
-
 cookFilter = function(con, name){
   dplyr::tbl(con, name)|>
     #filter(Date==lubridate::today()-3)|>
     as_tibble()
 }
-
-UITableList = purrr::map(tables, function(table){
-  UITable(
-    get(table$con),
-    table$name,
-    id = table$id,
-    types = retnn(table$types, list()),
-    typemap = retnn(table$typemap, list()),
-    opt = retnn(table$opt, list()),
-    input = purrr::map(table$rows, function(x){
-      r = x$input
-      if(is.list(r))if(!is.null(r$con))r$con = get(r$con)
-      r
-    })|>
-      purrr::discard(is.null),
-    js = table$js,
-    tbl = get(retnn(table$tbl, "tbl")),
-    keys = table$keys
-  )
-})
+data = yaml::read_yaml("config.yaml")$tables
+container = UIContainer(data)
 
 read_file("format.scss")|>
   sass::sass()|>
@@ -77,33 +58,13 @@ read_file("format.scss")|>
 # Define UI for application that creates a user interface for SQL tables
 ui = bootstrapPage(
     theme = bslib::bs_theme(version = 4),
-    includeCSS("format.css"),
-    includeScript("tbl.js"),
-    includeScript("connection.js"),
-    includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
-    includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
-    useShinyjs(),  # Include shinyjs
-    mainTables(
-      id = "tabset",
-      .adv = T,
-      .tabs= purrr::map(tables, function(table){
-        x=table$tab|>
-          purrr::discard(is.null)
-        x$id = table$id
-        return(x)
-      })|>
-        unname()
-    )
+    includeUITable(container)
 )
 
 
 # Define server logic to render the tables and allow interactivity
 server = function(input, output, session) {
-  observeTab(
-    session, input, "tabset",
-    .commitout=FALSE,
-    .tabs=UITableList
-  )
+  observeSwitch(session, input, container)
   
   onSessionEnded(function(){
     message("Closing pools")
