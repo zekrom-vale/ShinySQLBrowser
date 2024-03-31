@@ -81,8 +81,8 @@ tables:
             # id will be fetched from outer
             value: null
             icon: null
-        con: CookLog # Passed through get()
-        name: items
+        con: Work  # Passed through get()
+        name: people
         id: People
         types: null
         opt: null
