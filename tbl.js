@@ -49,7 +49,7 @@ function evalName(name, sep="."){
 }
 
 function escapeHTML(unsafe) {
-	return unsafe.replace(/[&<"'>]/g, m=>{
+	return String(unsafe).replace(/[&<"'>]/g, m=>{
 		switch(m){
 			case '&':
 				return '&amp;';
