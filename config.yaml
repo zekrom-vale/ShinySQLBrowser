@@ -1,7 +1,7 @@
 ---
 
 tables:
-    cook:
+    CookLog:
         tab:
             title: CookLog # The title and identifier for the tabPanel
             # id will be fetched from outer
@@ -9,7 +9,7 @@ tables:
             icon: null
         con: CookLog # Passed through get()
         name: cook
-        id: null
+        id: Cook
         types: null
         opt: null
         rows:
@@ -38,11 +38,11 @@ tables:
             Comment:
                 width: 300px
         js: null
-        tbl: null # Passed through get() local function
+        tbl: cookFilter # Passed through get() local function
         keys: ID
 
 
-    cookitems:
+    CookItems:
         tab:
             title: CookItems # The title and identifier for the tabPanel
             # id will be fetched from outer
@@ -75,7 +75,7 @@ tables:
         tbl: null # Passed through get() local function
         keys: ID
 
-    people:
+    People:
         tab:
             title: People # The title and identifier for the tabPanel
             # id will be fetched from outer
@@ -104,7 +104,7 @@ tables:
 
 
 
-    salad:
+    SaladLog:
         tab:
             title: SaladLog # The title and identifier for the tabPanel
             # id will be fetched from outer
@@ -112,7 +112,7 @@ tables:
             icon: null
         con: SaladLog # Passed through get()
         name: salad
-        id: SaladItems
+        id: SaladLog
         types: null
         opt: null
         rows: 
@@ -148,7 +148,7 @@ tables:
         tbl: null # Passed through get() local function
         keys: ID
         
-    saladitems:
+    SaladItems:
         tab:
             title: SaladItems # The title and identifier for the tabPanel
             # id will be fetched from outer
@@ -156,7 +156,7 @@ tables:
             icon: null
         con: SaladLog # Passed through get()
         name: items
-        id: null
+        id: SaladItems
         types: null
         opt: null
         rows:

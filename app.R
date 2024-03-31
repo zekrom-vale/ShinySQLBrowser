@@ -18,7 +18,7 @@ library(shinyjs)
 source("table.R", local = TRUE, keep.source = TRUE)
 
 user= 'root'
-password="<removed>"
+password="RayLVM"
 
 CookLog <- dbPool(
   drv = RMariaDB::MariaDB(),
@@ -41,74 +41,38 @@ Work <- dbPool(
   dbname ='Work'
 )
 
-cook=UITable(
-  CookLog,
-  "cook",
-  input=list(
-    ID='<input type="number" disabled>',
-    ItemID=list(table="items", key="ID", val="Item"),
-    Person=list(con=Work, table="people", key="ID", val="Name")
-  ),
-  tbl=function(con, name){
-    tbl(con, name)|>
-      #filter(Date==lubridate::today()-3)|>
-      as_tibble()
-  },
-  keys="ID"
-)
+tables = yaml::read_yaml("config.yaml")$tables
 
-cookitems=UITable(
-  CookLog,
-  "items",
-  id="CookItems",
-  input=list(
-    ID='<input type="number" disabled>',
-    Method=list(table="methods", key="ID", value="Method")
-  ),
-  keys="ID"
-)
+cookFilter = function(con, name){
+  dplyr::tbl(con, name)|>
+    #filter(Date==lubridate::today()-3)|>
+    as_tibble()
+}
 
-people=UITable(
-  Work,
-  "people",
-  id="People",
-  input=list(
-    ID='<input type="number" disabled>'
-  ),
-  keys="ID"
-)
-
-saladitems=UITable(
-  SaladLog,
-  "items",
-  input=list(
-    ID='<input type="number" disabled>'
-  ),
-  tbl=function(con, name){
-    tbl(con, name)
-  },
-  keys="ID"
-)
-
-salad=UITable(
-  SaladLog,
-  "salad",
-  id="SaladItems",
-  input=list(
-    ID='<input type="number" disabled>',
-    SaladID=list(table="items", key="ID", val="Salad"),
-    Person=list(con=Work, table="people", key="ID", val="Name")
-  ),
-  tbl=function(con, name){
-    tbl(con, name)
-  },
-  keys="ID"
-)
-
+UITableList = purrr::map(tables, function(table){
+  UITable(
+    get(table$con),
+    table$name,
+    id = table$id,
+    types = retnn(table$types, list()),
+    typemap = retnn(table$typemap, list()),
+    opt = retnn(table$opt, list()),
+    input = purrr::map(table$rows, function(x){
+      r = x$input
+      if(is.list(r))if(!is.null(r$con))r$con = get(r$con)
+      r
+    })|>
+      purrr::discard(is.null),
+    js = table$js,
+    tbl = get(retnn(table$tbl, "tbl")),
+    keys = table$keys
+  )
+})
 
 read_file("format.scss")|>
   sass::sass()|>
   write_file("format.css")
+
 
 # Define UI for application that creates a user interface for SQL tables
 ui = bootstrapPage(
@@ -119,38 +83,34 @@ ui = bootstrapPage(
     includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
     includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
     useShinyjs(),  # Include shinyjs
-    
     mainTables(
-      CookLog=cook,
-      CookItems=cookitems,
-      SaladLog=salad,
-      SaladItems=saladitems,
-      People=people,
-      id="tabset"
+      id = "tabset",
+      .adv = T,
+      .tabs= purrr::map(tables, function(table){
+        x=table$tab|>
+          purrr::discard(is.null)
+        x$id = table$id
+        return(x)
+      })|>
+        unname()
     )
 )
 
+
 # Define server logic to render the tables and allow interactivity
 server = function(input, output, session) {
-  
   observeTab(
-    session,input, "tabset",
-    CookLog=cook,
-    CookItems=cookitems,
-    People=people,
-    SaladLog=salad,
-    SaladItems=saladitems,
-    .commitout=FALSE
+    session, input, "tabset",
+    .commitout=FALSE,
+    .tabs=UITableList
   )
-  
-  
   
   onSessionEnded(function(){
     message("Closing pools")
     poolClose(Work)
     poolClose(CookLog)
     poolClose(SaladLog)
-    quit(save = "no")
+    # quit(save = "no")
   })
 }
 

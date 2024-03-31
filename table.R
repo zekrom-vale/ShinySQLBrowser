@@ -231,7 +231,6 @@ data-keys="{{this@keys}}"
     ),
     typemap
   )
-  
   tib=tbl(con, name)
   
   types = modifyList(
@@ -312,6 +311,9 @@ toTable=function(this){
     this@input,
     function(input){
       if(!is.list(input))return(c(input))
+      if(!(
+        is.null(input$con)||"Pool" %in% class(input$con)
+      ))stop("Connection is not a Pool")
       con=retnn(input$con,this@con)
       tb=switch(this@opt$use_this_tbl,
         "force" = this@tbl,
@@ -444,7 +446,7 @@ tabTable = function(title, id, ..., value=title, icon = NULL){
 #' list(title="CookItems", id="CookItems")
 #' ), id="tabset", .adv=T)
 #' 
-mainTables = function(..., id, .adv=F){
+mainTables = function(..., id, .adv=F, .tabs=NULL){
   
   tabTables = function(tabs, id, .adv=F){
     if(!.adv)tabs=purrr::imap(tabs, function(tab, i){list(title=i, id=tab@id)})|>
@@ -456,7 +458,8 @@ mainTables = function(..., id, .adv=F){
     tabs$id=id
     tabs
   }
-  tabs=list(...)
+  if(is.null(.tabs))tabs = list(...)
+  else tabs = .tabs
   mainPanel(
     do.call(
       tabsetPanel,
@@ -492,8 +495,9 @@ tabJs = function(input, tab, set, .commitout=TRUE){
 #' @param input A siny input
 #' @param tab The tab id
 #' @param ... A list of tab values as keys and UITable objects as values
-observeTab = function(session, input, tab, ..., .commitout=TRUE){
-  set = list(...)
+observeTab = function(session, input, tab, ..., .commitout=TRUE, .tabs=NULL){
+  if(is.null(.tabs))set = list(...)
+  else set = .tabs
   
   # Start message handeler
   purrr::map(set, function(obj){
