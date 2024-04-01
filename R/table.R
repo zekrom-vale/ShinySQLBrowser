@@ -373,7 +373,7 @@ toTable=function(this){
       col=glue::glue(this@opt$td$templateglue)
     )|>
   	dplyr::summarise(paste(col, collapse = this@opt$td$collapse))|>
-    pull()
+  	dplyr::pull()
   template=glue::glue(this@opt$tr$templateglue)
 
 
@@ -439,7 +439,7 @@ mainTables = function(..., id, .adv=F, .tabs=NULL){
         unname()
     tabs=tabs|>
       purrr::map(function(x){
-      	shiny::tabPanel(x$title, shiny::fluidRow(tableOutput(x$id)), value=retnn(x$value, x$title), icon=x$icon)
+      	shiny::tabPanel(x$title, shiny::fluidRow(shiny::tableOutput(x$id)), value=retnn(x$value, x$title), icon=x$icon)
       })
     tabs$id=id
     tabs
