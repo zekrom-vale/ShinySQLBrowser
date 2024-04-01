@@ -204,7 +204,11 @@ toTable=function(this){
         is.null(input$con)||"Pool" %in% class(input$con)
       ))stop("Connection is not a Pool")
       con=retnn(input$con,this@con)
-      tb=switch(this@opt$use_this_tbl,
+      test = this@opt$use_this_tbl
+      if(test==TRUE)test="on"
+      else if(test==FALSE)test="off"
+      test=tolower(test)
+      tb=switch(test,
         "force" = this@tbl,
         "on" = `if`(con == this@con, retnn(input@tbl, this@tbl, retnn(input$tbl, dplyr::tbl))),
         "off" = retnn(input$tbl, dplyr::tbl)

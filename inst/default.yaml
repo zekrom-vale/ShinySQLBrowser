@@ -90,7 +90,7 @@ opt:
   thead:
     class: ''
     glue: <thead class="{{this@opt$thead$class}}">
-  use_this_tbl: off
+  use_this_tbl: 'off'
 typemap:
   integer64: <input type="number" min="-9223372036854775808" max="9223372036854775807" step="1">
   integer: <input type="number" min="-2147483648" max="2147483647" step="1">
