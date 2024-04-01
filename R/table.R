@@ -112,109 +112,12 @@ UITable = function(
     warning("con is not a Pool, use `pool::dbPool()` not `DBI::dbConnect()` for stability")
 
   opt = utils::modifyList(
-    list(
-      td= list(
-        class="",
-        collapse=" ",
-        glue='<td
-class="{{this@name}}-{col} {{this@opt$td$class}}"
-data-col="{{this@name}}-{col}"
-data-val="{x}">
-</td>',
-        templateglue='<td
-class="{{this@name}}-{col} {{this@opt$td$class}}"
-data-col="{{this@name}}-{col}">
-</td>',
-        remove=list(
-          text='<button type="button" class="remove btn btn-danger" aria-label="Remove">
-{{bsicons::bs_icon("eraser-fill")}}
-</button>',
-          class="",
-          glue='<td class="ecl remove {{this@opt$td$remove$class}}">
-{{this@opt$td$remove$text}}
-</td>'
-        ),
-        discard=list(
-          text='<button type="button" class="discard btn btn-warning" aria-label="Discard">
-{{bsicons::bs_icon("x-circle-fill")}}
-</button>',
-          class="",
-          glue='<td class="ecl discard {{this@opt$td$discard$class}}">
-{{this@opt$td$discard$text}}
-</td>'
-        ),
-        commit=list(
-          text='<button type="button" class="commit btn btn-success" aria-label="Commit">
-{{bsicons::bs_icon("play-fill")}}
-</button>',
-          class="",
-          glue='<td class="ecl commit {{this@opt$td$commit$class}}">
-{{this@opt$td$commit$text}}
-</td>'
-        )
-      ),
-      tr    = list(
-        class="",
-        collapse=" ",
-        glue='<tr class="{{this@opt$tr$class}}">
-{row}
-{{this@opt$td$commit$glue}}
-{{this@opt$td$discard$glue}}
-{{this@opt$td$remove$glue}}
-</tr>',
-        templateglue='<tr class="{{this@opt$tr$class}} new-tr">
-{template}
-{{this@opt$td$commit$glue}}
-{{this@opt$td$discard$glue}}
-{{this@opt$td$remove$glue}}
-</tr>'
-      ),
-      th    = list(
-        class="",
-        collapse=" ",
-        glue='<th
-class="{{this@name}}-{x} {{this@opt$th$class}}"
-scope="col"
-data-type="{vd(this@types,x)}"
-id="{{this@name}}-{x}"
-data-vals="{vdn(input,x,2)}"
-data-col="{x}">
-{x}
-<template>{vdn(input,x,1)}</template>
-</th>'
-      ),
-      table = list(
-        class="table",
-        glue='<table
-class="{{this@opt$table$class}}"
-id="{{this@id}}-table"
-data-js="{{this@js}}"
-data-port="{{this@id}}"
-data-keys="{{this@keys}}"
->'
-      ),
-      tbody = list(
-        class="table-striped",
-        glue='<tbody class="{{this@opt$tbody$class}}">'
-      ),
-      thead = list(
-        class="",
-        glue='<thead class="{{this@opt$thead$class}}">'
-      ),
-      use_this_tbl = "off" # c("force", "off", "on")
-    ),
+    yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser"))$opt,
     opt
   )
 
   typemap = utils::modifyList(
-    list(
-      integer64       = '<input type="number" min="-9223372036854775808" max="9223372036854775807" step="1">',
-      integer         = '<input type="number" min="-2147483648" max="2147483647" step="1">',
-      Date            = '<input type="date">',
-      "hms difftime"  = '<input type="time">',
-      character       = '<input type="text">',
-      double          = '<input type="number" min="-2147483648" max="2147483647">'
-    ),
+  	yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser"))$typemap,
     typemap
   )
   tib=tbl(con, name)

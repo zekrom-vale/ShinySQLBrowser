@@ -10,4 +10,4 @@ License: CC0 1.0 Universal
 Encoding: UTF-8
 LazyData: true
 Depends: methods
-Imports: DBI, shiny, shinyjs, purrr, htmltools, glue, jsonlite, bsicons, utils, dplyr, tidyr
+Imports: DBI, shiny, shinyjs, purrr, htmltools, glue, jsonlite, bsicons, utils, dplyr, tidyr, yaml
