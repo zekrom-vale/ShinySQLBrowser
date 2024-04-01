@@ -56,6 +56,7 @@ read_file("format.scss")|>
 # Define UI for application that creates a user interface for SQL tables
 ui = bootstrapPage(
     theme = bslib::bs_theme(version = 4),
+    htmltools::includeCSS("format.css"),
     includeUITable(container)
 )
 

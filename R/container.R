@@ -45,9 +45,8 @@ observeSwitch = function(session, input, container){
 
 includeUITable = function(container){
   shiny::div(
-  	htmltools::includeCSS("format.css"),
-  	htmltools::includeScript("tbl.js"),
-  	htmltools::includeScript("connection.js"),
+  	htmltools::includeScript(system.file("tbl.js", package="ShinySQLBrowser")),
+  	htmltools::includeScript(system.file("connection.js", package="ShinySQLBrowser")),
   	htmltools::includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
   	htmltools::includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
   	shinyjs::useShinyjs(),  # Include shinyjs
