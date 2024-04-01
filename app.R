@@ -14,8 +14,7 @@ library(dbplyr)
 library(pool)
 library(shiny)
 library(shinyjs)
-
-source("table.R", local = TRUE, keep.source = TRUE)
+library(ShinySQLBrowser)
 
 user= 'root'
 password="RayLVM"
@@ -64,7 +63,7 @@ ui = bootstrapPage(
 # Define server logic to render the tables and allow interactivity
 server = function(input, output, session) {
   observeSwitch(session, input, container)
-  
+
   onSessionEnded(function(){
     message("Closing pools")
     poolClose(Work)

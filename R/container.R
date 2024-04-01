@@ -1,4 +1,4 @@
-setClass(
+methods::setClass(
   "UIContainer",
   slots = c(
     data = "list",
@@ -31,7 +31,7 @@ UIContainer = function(data){
       keys = table$keys
     )
   })
-  new("UIContainer", data=data, tables=tables)
+  methods::new("UIContainer", data=data, tables=tables)
 };
 
 observeSwitch = function(session, input, container){
@@ -44,12 +44,12 @@ observeSwitch = function(session, input, container){
 
 includeUITable = function(container){
   shiny::div(
-    includeCSS("format.css"),
-    includeScript("tbl.js"),
-    includeScript("connection.js"),
-    includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
-    includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
-    useShinyjs(),  # Include shinyjs
+  	htmltools::includeCSS("format.css"),
+  	htmltools::includeScript("tbl.js"),
+  	htmltools::includeScript("connection.js"),
+  	htmltools::includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
+  	htmltools::includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
+  	shinyjs::useShinyjs(),  # Include shinyjs
     mainTables(
       id = "tabset",
       .adv = T,

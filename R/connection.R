@@ -3,49 +3,49 @@ procWhere = function(where, con, .comp="==", .op="&", .NAisNULL=TRUE){
   for(i in seq(1, length(where))){
     val = where[[i]]
     id=names(where)[[i]]
-    
-    
+
+
     comp=retna(val[2], .comp)
     op=retna(val[3], .op)
     val=val[1]
     # UNTRUSTED id
     id=DBI::dbQuoteIdentifier(con, id)
     # UNTRUSTED comp
-    
+
     if(i == length(where)) comp = ""
     else comp=switch(comp,
        "and" = "and",
        "&&" = "and",
        "&" = "and",
-       
+
        "or" = "or",
        "||" = "or",
        "|" = "or",
-       
+
        "xor" = "xor",
        ""
     )
-    
+
     # UNTRUSTED op
     op=switch(op,
       "lt" = "<",
       "<" = "<",
-      
+
       "gt" = ">",
       ">" = ">",
-      
+
       "ge" = ">=",
       ">=" = ">=",
       "=>" = ">=",
-      
+
       "le" = "<=",
       "<=" = "<=",
       "=<" = "<=",
-      
+
       "ne" = "<>",
       "!=" = "<>",
       "<>" = "<>",
-      
+
       "eq" = "=",
       "==" = "=",
       "=" = "=",
@@ -56,8 +56,8 @@ procWhere = function(where, con, .comp="==", .op="&", .NAisNULL=TRUE){
     if(is.na(val))val=""
     val=DBI::dbQuoteLiteral(con, val)
     if(val=="''"&&.NAisNULL)val="NULL"
-    
-    l[[i]]=str_glue('{id} {op} {val} {comp}')|>
+
+    l[[i]]=glue::glue('{id} {op} {val} {comp}')|>
       as.character()
   }
   paste(l, collapse=" ")
@@ -69,7 +69,7 @@ procData = function(data, con, .NAisNULL=TRUE){
     if(is.na(val))val=""
     val=DBI::dbQuoteLiteral(con, val)
     if(val=="''"&&.NAisNULL)val="NULL"
-    str_glue(DBI::dbQuoteIdentifier(con, id), " = ", val)
+    glue::glue(DBI::dbQuoteIdentifier(con, id), " = ", val)
   })|>
     paste(collapse=", ")
 }
@@ -77,12 +77,12 @@ procData = function(data, con, .NAisNULL=TRUE){
 sendUpdate = function(where, data, table, con, .comp="==", .op="&"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
   data = procData(data, con)
-  
+
   data=purrr::discard(data, function(x)is.null(x)||x=="")
-  
-  exe=str_glue("UPDATE {table} SET {data} WHERE {where}")|>
+
+  exe=glue::glue("UPDATE {table} SET {data} WHERE {where}")|>
     as.character()
-  
+
   tryCatch(
     list(status= "resolve", effect=DBI::dbExecute(con, exe)),
     error = function(e)
@@ -92,9 +92,9 @@ sendUpdate = function(where, data, table, con, .comp="==", .op="&"){
 
 sendRemove = function(where, table, con, .comp="==", .op="&"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
-  
-  exe=str_glue("DELETE FROM {table} WHERE {where}")
-  
+
+  exe=glue::glue("DELETE FROM {table} WHERE {where}")
+
   tryCatch(
     list(status= "resolve", effect=DBI::dbExecute(con, exe)),
     error = function(e)
@@ -104,10 +104,10 @@ sendRemove = function(where, table, con, .comp="==", .op="&"){
 
 sendRead = function(where, table, con, .comp="==", .op="&"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
-  
-  exe=str_glue("SELECT * FROM {table} WHERE {where}")|>
+
+  exe=glue::glue("SELECT * FROM {table} WHERE {where}")|>
     as.character()
-  
+
   tryCatch(
     list(status= "resolve", data=DBI::dbGetQuery(con, exe)|>as.list()),
     error = function(e)
@@ -118,19 +118,19 @@ sendRead = function(where, table, con, .comp="==", .op="&"){
 sendCreate = function(data, keys, table, con, .autoinc=TRUE){
   data=purrr::discard(data, function(x)is.null(x)||x=="")
   run=tryCatch(
-    as_tibble(data)|>
+    dplyr::as_tibble(data)|>
       DBI::dbAppendTable(con, table, value=_)|>
       list(status= "resolve", effect=_),
     error=function(e)
       list(status= "reject", effect=list(error=e$message, call=e$call, data=data))
   )
-  
+
   if(run$status=="resolve"&&.autoinc){
-    
-    exe=str_glue('SELECT * FROM {table} WHERE {str_split(keys, "[|,;:]")[[1]][1]} = LAST_INSERT_ID()')
-    
+
+    exe=glue::glue('SELECT * FROM {table} WHERE {str_split(keys, "[|,;:]")[[1]][1]} = LAST_INSERT_ID()')
+
     run$sql=exe
-    
+
     run$data=tryCatch(
       DBI::dbGetQuery(con, exe)|>
         as.list(),
@@ -141,23 +141,23 @@ sendCreate = function(data, keys, table, con, .autoinc=TRUE){
 }
 
 observer = function(session, input, id, func){
-  message(str_glue("Adding observer {id}"))
-  observeEvent(input[[id]], {
-    message(str_glue("{id} recived {input[[id]]}"))
+  message(glue::glue("Adding observer {id}"))
+  shiny::observeEvent(input[[id]], {
+    message(glue::glue("{id} recived {input[[id]]}"))
     data = func(input[[id]])
-    message(str_glue("seding message {data}"))
+    message(glue::glue("seding message {data}"))
     session$sendCustomMessage(id, jsonlite::toJSON(data))
   })
 }
 
 tableObserver = function(session, input, id, uitable, .comp="==", .op="&"){
   observer(session, input, id, function(message){
-    if(is_empty(message$where)&&is_empty(message$data))return(
+    if(purrr::is_empty(message$where)&&purrr::is_empty(message$data))return(
       list(status= "reject", effect=list(error="Nothing Sent"))
     )
-    
+
     #  where:list(
-    #    ID:value | 
+    #    ID:value |
     #    ID:c(value, ">" | "<" | ">=" | "<=" | "=", "&" | "|"),
     #    ...
     #  )
@@ -186,6 +186,6 @@ tableObserver = function(session, input, id, uitable, .comp="==", .op="&"){
         )
       }
     )
-    
+
   })
 }

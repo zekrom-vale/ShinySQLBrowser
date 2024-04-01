@@ -1,4 +1,3 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^build$
-^\.git
+^\.git.*

@@ -9,3 +9,5 @@ Description: Set up a interactable interface for data entry with one or may SQL 
 License: CC0 1.0 Universal
 Encoding: UTF-8
 LazyData: true
+Depends: methods
+Imports: DBI, odbc, tidyverse, dbplyr, pool, DT, shiny, shinyjs, purrr, htmltools, glue, jsonlite, bsicons, utils, dplyr, tidyr
