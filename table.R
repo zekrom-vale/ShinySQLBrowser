@@ -12,6 +12,7 @@ source("connection.R", local = TRUE, keep.source = TRUE)
 
 
 
+
 ########################
 # START
 # CLASS : UITable
@@ -516,3 +517,6 @@ observeTab = function(session, input, tab, ..., .commitout=TRUE, .tabs=NULL){
 # END
 # CLASS : UITable
 ########################
+
+
+source("container.R", local = TRUE, keep.source = TRUE)

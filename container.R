@@ -10,14 +10,8 @@ setClass(
   )
 );
 
-
 UIContainer = function(data){
-  new("UIContainer", data=data, tables=grabUITables(data))
-};
-
-
-grabUITables = function(data){
-  purrr::map(data, function(table){
+  tables = purrr::map(data, function(table){
     input = purrr::map(table$rows, function(x){
       r = x$input
       if(is.list(r))if(!is.null(r$con))r$con = get(r$con)
@@ -37,36 +31,15 @@ grabUITables = function(data){
       keys = table$keys
     )
   })
-}
+  new("UIContainer", data=data, tables=tables)
+};
 
-grabMainTables = function(data){
-  mainTables(
-    id = "tabset",
-    .adv = T,
-    .tabs= purrr::map(data, function(table){
-      x=table$tab|>
-        purrr::discard(is.null)
-      x$id = table$id
-      return(x)
-    })|>
-      unname()
-  )
-}
-
-mainUITables = function(container){
-  grabMainTables(container@data)
-}
-
-awaitObserveTabs <- function(session, input, tables) {
+observeSwitch = function(session, input, container){
   observeTab(
     session, input, "tabset",
     .commitout=FALSE,
-    .tabs=tables
+    .tabs=container@tables
   )
-}
-
-observeSwitch = function(session, input, container){
-  awaitObserveTabs(session, input, container@tables)
 }
 
 includeUITable = function(container){
@@ -77,6 +50,16 @@ includeUITable = function(container){
     includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
     includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
     useShinyjs(),  # Include shinyjs
-    mainUITables(container)
+    mainTables(
+      id = "tabset",
+      .adv = T,
+      .tabs= purrr::map(container@data, function(table){
+        x=table$tab|>
+          purrr::discard(is.null)
+        x$id = table$id
+        return(x)
+      })|>
+        unname()
+    )
   )
 }

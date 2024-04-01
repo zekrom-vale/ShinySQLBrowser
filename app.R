@@ -16,7 +16,6 @@ library(shiny)
 library(shinyjs)
 
 source("table.R", local = TRUE, keep.source = TRUE)
-source("container.R", local = TRUE, keep.source = TRUE)
 
 user= 'root'
 password="RayLVM"
