@@ -1,0 +1,11 @@
+Package: ShinySQLBrowser
+Type: Package
+Title: Set up a interactable interface for data entry with one or may SQL databses
+Version: 0.2.0
+Author: ZekromVale
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Set up a interactable interface for data entry with one or may SQL databses.
+    Use an object for configuration or import one from YAML, JSON, or any other format. 
+License: CC0 1.0 Universal
+Encoding: UTF-8
+LazyData: true
