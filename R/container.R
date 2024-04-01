@@ -11,15 +11,16 @@ methods::setClass(
 );
 
 UIContainer = function(data){
+  env = parent.frame()
   tables = purrr::map(data, function(table){
     input = purrr::map(table$rows, function(x){
       r = x$input
-      if(is.list(r))if(!is.null(r$con))r$con = get(r$con)
+      if(is.list(r))if(!is.null(r$con))r$con = get(r$con, envir = env)
       r
     })|>
       purrr::discard(is.null)
     UITable(
-      get(table$con),
+      get(table$con, envir = env),
       table$name,
       id = table$id,
       types = retnn(table$types, list()),
@@ -27,7 +28,7 @@ UIContainer = function(data){
       opt = retnn(table$opt, list()),
       input = input,
       js = table$js,
-      tbl = get(retnn(table$tbl, "tbl")),
+      tbl = `if`(is.null(table$tbl), dplyr::tbl, get(table$tbl, envir = env)),
       keys = table$keys
     )
   })
