@@ -1,6 +1,11 @@
 #' Process Where
 #'
-#' @param where
+#' @description
+#' Processes the where list of operations and returns an SQL \code{where} statement
+#' as a string.
+#'
+#'
+#' @param where A list of operations to do returned by JS
 #' @param con The \code{link{pool}} connection
 #' @param .comp Default comparator \code{equal ==}
 #' @param .op Default operator \code{and &&} excluded in last statement
@@ -73,6 +78,17 @@ procWhere = function(where, con, .comp="==", .op="and", .NAisNULL=TRUE){
   paste(l, collapse=" ")
 }
 
+#' Process Data
+#'
+#' @description
+#' Processes the data list \code{set} statement as a string.
+#'
+#' @param data A list of columns returned by JS
+#' @param con The \code{link{pool}} connection
+#' @param .NAisNULL Treats \code{NA} as \code{NULL}
+#'
+#' @return A partial SQL string of \code{id comp val op} like \code{ID == 1 and}
+#' @export
 procData = function(data, con, .NAisNULL=TRUE){
   purrr::imap(data, function(val, id){
     if(is.null(val))val=""
@@ -84,6 +100,14 @@ procData = function(data, con, .NAisNULL=TRUE){
     paste(collapse=", ")
 }
 
+
+#' Send an SQL Update
+#'
+#' @inheritParams procData
+#' @inheritParams procWhere
+#' @param table The table to operate on
+#'
+#' @export
 sendUpdate = function(where, data, table, con, .comp="==", .op="and"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
   data = procData(data, con)
@@ -100,6 +124,12 @@ sendUpdate = function(where, data, table, con, .comp="==", .op="and"){
   )
 }
 
+#' Send an SQL Remove
+#'
+#' @inheritParams procWhere
+#' @param table The table to operate on
+#'
+#' @export
 sendRemove = function(where, table, con, .comp="==", .op="&"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
 
@@ -112,6 +142,12 @@ sendRemove = function(where, table, con, .comp="==", .op="&"){
   )
 }
 
+#' Send an SQL Remove
+#'
+#' @inheritParams procWhere
+#' @param table The table to operate on
+#'
+#' @export
 sendRead = function(where, table, con, .comp="==", .op="&"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
 
@@ -125,6 +161,13 @@ sendRead = function(where, table, con, .comp="==", .op="&"){
   )
 }
 
+#' Send an SQL Create
+#'
+#' @inheritParams procData
+#' @param table The table to operate on
+#' @param keys The primary keys of the table
+#'
+#' @export
 sendCreate = function(data, keys, table, con, .autoinc=TRUE){
   data=purrr::discard(data, function(x)is.null(x)||x=="")
   run=tryCatch(
@@ -150,6 +193,15 @@ sendCreate = function(data, keys, table, con, .autoinc=TRUE){
   run
 }
 
+
+#' Observer
+#'
+#' @inheritParams shinyTab
+#' @param id The shiny value to listen to
+#' @param func What to do
+#'
+#' @export
+#'
 observer = function(session, input, id, func){
   message(glue::glue("Adding observer {id}"))
   shiny::observeEvent(input[[id]], {
@@ -160,6 +212,14 @@ observer = function(session, input, id, func){
   })
 }
 
+#' Send an SQL Update
+#'
+#' @inheritParams procData
+#' @inheritParams procWhere
+#' @inheritParams observer
+#' @param uitable The table to operate on
+#'
+#' @export
 tableObserver = function(session, input, id, uitable, .comp="==", .op="&"){
   observer(session, input, id, function(message){
     if(purrr::is_empty(message$where)&&purrr::is_empty(message$data))return(

@@ -2,8 +2,7 @@
 % Please edit documentation in R/container.R
 \name{observeSwitch}
 \alias{observeSwitch}
-\title{Observes the switching of tabs to trigger loading of the tables
-Put this in the \code{\link{shinyApp}} \code{server} code}
+\title{Observe Switch of Tabs}
 \usage{
 observeSwitch(session, input, container)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/container.R
 \name{UIContainer}
 \alias{UIContainer}
-\title{Generates a list of UITables with a configuration object}
+\title{Generate UITables}
 \usage{
 UIContainer(data)
 }
@@ -15,6 +15,14 @@ An object containing a list of UITables and the original data
 \description{
 Generates a list of UITables with a configuration object
 }
+\section{Slots}{
+
+\describe{
+\item{\code{data}}{The original data used to generate the \code{\link{UITable}}}
+
+\item{\code{tables}}{A list of \code{\link{UITable}}}
+}}
+
 \section{Data Structure}{
 
 An R nested list with the flowing structure.

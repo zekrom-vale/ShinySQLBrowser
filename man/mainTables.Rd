@@ -7,6 +7,8 @@
 mainTables(..., id, .adv = F, .tabs = NULL)
 }
 \arguments{
+\item{..., .tabs}{The list of tabs to add}
+
 \item{id}{The id of the \code{\link{tabsetPanel}}}
 
 \item{.adv}{Use the long form (\code{FALSE}) or the short form (\code{TRUE}) for tabs
@@ -26,8 +28,6 @@ A list of title, id, and arguments to pass to tabPanel
 \item value:  Optional The value that should be sent when tabsetPanel reports that this tab is selected.
 \item icon:   Optional icon to appear on the tab.  This attribute is only valid when using a tabPanel within a navbarPage().
 }}
-
-\item{tabs}{The list of tabs to add}
 }
 \description{
 Creates a list of \code{\link{tabPanels}}

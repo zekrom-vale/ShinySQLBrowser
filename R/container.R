@@ -1,5 +1,7 @@
+#' UIContainer
 #'
-#' UIContainer A simple container to hold \code{\link{UITable}} objects
+#' @description
+#' A simple container to hold \code{\link{UITable}} objects
 #'
 #' @slot data The original data used to generate the \code{\link{UITable}}
 #' @slot tables A list of \code{\link{UITable}}
@@ -15,9 +17,14 @@ methods::setClass(
   )
 );
 
+#' Generate UITables
+#'
+#' @description
 #' Generates a list of UITables with a configuration object
 #'
 #' @param data A Data Structure
+#' @slot data The original data used to generate the \code{\link{UITable}}
+#' @slot tables A list of \code{\link{UITable}}
 #'
 #' @return An object containing a list of UITables and the original data
 #' @export
@@ -86,6 +93,9 @@ UIContainer = function(data){
 };
 
 
+#' Observe Switch of Tabs
+#'
+#' @description
 #' Observes the switching of tabs to trigger loading of the tables
 #' Put this in the \code{\link{shinyApp}} \code{server} code
 #'
@@ -112,6 +122,10 @@ observeSwitch = function(session, input, container){
   )
 }
 
+#' Load Requirements
+#'
+#' @description
+#'
 #' Includes js, css, shinyJS dependencies into the shiny UI
 #' Put this in the \code{\link{shinyApp}} \code{UI} code
 #'

@@ -2,8 +2,7 @@
 % Please edit documentation in R/table.R
 \name{tabJs}
 \alias{tabJs}
-\title{Run the scripts of the tables
-Client side, and Set HTML table}
+\title{Run the JS start the HTML}
 \usage{
 tabJs(input, tab, set, .commitout = TRUE)
 }

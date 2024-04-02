@@ -8,11 +8,11 @@ Server side, Client side, and Set HTML table}
 observeTab(session, input, tab, ..., .commitout = TRUE, .tabs = NULL)
 }
 \arguments{
-\item{session}{A shiny session}
+\item{session}{The Shiny session}
 
-\item{input}{A Shiny input}
+\item{input}{The shiny input}
 
-\item{tab}{The tab id}
+\item{tab}{The name of the open tab}
 
 \item{...}{A list of tabPanels values and UITable objects as key value pairs
 Observe the changes of the tabs}

@@ -2,8 +2,7 @@
 % Please edit documentation in R/container.R
 \name{includeUITable}
 \alias{includeUITable}
-\title{Includes js, css, shinyJS dependencies into the shiny UI
-Put this in the \code{\link{shinyApp}} \code{UI} code}
+\title{Load Requirements}
 \usage{
 includeUITable(
   container,

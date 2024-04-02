@@ -3,9 +3,9 @@
 \docType{class}
 \name{UIContainer-class}
 \alias{UIContainer-class}
-\title{UIContainer A simple container to hold \code{\link{UITable}} objects}
+\title{UIContainer}
 \description{
-UIContainer A simple container to hold \code{\link{UITable}} objects
+A simple container to hold \code{\link{UITable}} objects
 }
 \section{Slots}{
 

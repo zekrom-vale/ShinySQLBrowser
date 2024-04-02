@@ -11,6 +11,8 @@ tabTable(title, id, ..., value = title, icon = NULL)
 
 \item{id}{The id of the \code{\link{tableOutput}}}
 
+\item{...}{UI elements to include within the tab}
+
 \item{value}{The Shiny event value for tabset}
 
 \item{icon}{An icon to use}

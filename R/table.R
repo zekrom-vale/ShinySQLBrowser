@@ -1,3 +1,12 @@
+
+
+#' @name shinyTab
+#'
+#' @param session The Shiny session
+#' @param input The shiny input
+#' @param tab The name of the open tab
+NULL
+
 ########################
 # START
 # CLASS : UITable
@@ -71,10 +80,14 @@ methods::setClass(
   )
 );
 
-#'Vectorise \code{class(pull(.data, var))}
+#' Pull class of columns
 #'
-#'@param .data The table to pull from
-#'@param var The column to pull
+#' @description
+#' Used in \code{\link{mutate}} to obtain the class of the column.
+#' Vectorised form of \code{class(pull(.data, var))}
+#'
+#' @param .data The table to pull from
+#' @param var The column to pull
 pullclass=Vectorize(
   function(.data, var)paste(class(dplyr::pull(.data, var)), collapse = " "),
   vectorize.args = "var",
@@ -307,13 +320,14 @@ toTable=function(this){
 #' @param id The id of the \code{\link{tableOutput}}
 #' @param value The Shiny event value for tabset
 #' @param icon An icon to use
+#' @param ... UI elements to include within the tab
 tabTable = function(title, id, ..., value=title, icon = NULL){
   shiny::tabPanel(title, shiny::fluidRow(shiny::tableOutput(id)), ..., value , icon)
 }
 
 
 #' Creates a list of \code{\link{tabPanels}}
-#' @param tabs The list of tabs to add
+#' @param ...,.tabs The list of tabs to add
 #' @param id The id of the \code{\link{tabsetPanel}}
 #' @param .adv Use the long form (\code{FALSE}) or the short form (\code{TRUE}) for tabs
 #'
@@ -363,10 +377,13 @@ mainTables = function(..., id, .adv=F, .tabs=NULL){
   )
 }
 
+#' Run the JS start the HTML
+#'
+#' @description
 #' Run the scripts of the tables
 #' Client side, and Set HTML table
-#' @param input The shiny input
-#' @param tab The name of the open tab
+#'
+#' @inheritParams shinyTab
 #' @param set A list of \code{\link{tabPanels}} values and \code{\link{UITable}} objects as key value pairs
 
 tabJs = function(input, tab, set, .commitout=TRUE){
@@ -378,17 +395,13 @@ tabJs = function(input, tab, set, .commitout=TRUE){
 }
 #' Run the scripts of the when it is visable
 #' Server side, Client side, and Set HTML table
-#' @param session The Shiny session
-#' @param input The shiny input
-#' @param tab The name of the open tab
+#' @inheritParams shinyTab
 #' @param ... A list of tabPanels values and UITable objects as key value pairs
 
 
 #' Observe the changes of the tabs
 #'
-#' @param session A shiny session
-#' @param input A Shiny input
-#' @param tab The tab id
+#' @inheritParams shinyTab
 #' @param ...,.tabs A list of tab values as keys and \code{\link{UITable}} objects as values
 observeTab = function(session, input, tab, ..., .commitout=TRUE, .tabs=NULL){
   if(is.null(.tabs))set = list(...)

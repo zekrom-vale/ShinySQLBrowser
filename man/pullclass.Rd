@@ -2,7 +2,7 @@
 % Please edit documentation in R/table.R
 \name{pullclass}
 \alias{pullclass}
-\title{Vectorise \code{class(pull(.data, var))}}
+\title{Pull class of columns}
 \usage{
 pullclass(.data, var)
 }
@@ -12,5 +12,6 @@ pullclass(.data, var)
 \item{var}{The column to pull}
 }
 \description{
-Vectorise \code{class(pull(.data, var))}
+Used in \code{\link{mutate}} to obtain the class of the column.
+Vectorised form of \code{class(pull(.data, var))}
 }
