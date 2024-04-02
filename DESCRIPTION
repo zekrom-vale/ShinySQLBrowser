@@ -11,3 +11,5 @@ Encoding: UTF-8
 LazyData: true
 Depends: methods
 Imports: DBI, shiny, shinyjs, purrr, htmltools, glue, jsonlite, bsicons, utils, dplyr, tidyr, yaml
+RoxygenNote: 7.3.1
+Roxygen: list(markdown = TRUE)

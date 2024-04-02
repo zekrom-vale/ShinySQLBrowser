@@ -6,13 +6,14 @@
 
 #' UITable
 #'
-#' @slot con A `pool` connection
+#' @slot con A \code{\link{pool}} connection
 #' @slot conname The name of the connection, defaults to the name of the pool argument
-#' @slot id TODO find what this does
+#' @slot id The HTML table id
 #' @slot name The tale name to connect to
 #' @slot types A list of the types of the columns, must name the columns
 #' @slot opt A list of styles
 #'
+#' \code{
 #'    td    = list(class="", collapse=" "),
 #'    tr    = list(class="", collapse=" "),
 #'    th    = list(class="", collapse=" "),
@@ -20,22 +21,22 @@
 #'    tbody = list(class="table-striped"),
 #'    thead = list(class=""),
 #'    use_this_tbl = c("force", "off", "on")
-#'
+#' }
 #' @slot typemap A list of the HTML input tags to generate per type
 #' If a list is passed instead of character it is used as a reference
 #' list(con=Work, table="people", key="ID", val="Name")
-#' con: Optional The connection to use, if not provided use the same connection as the table
-#' table: The table to access
-#' key: The primary key to use as an identifier of the table (value in option)
-#' value: The text to display or pick as the user
-#' Use key==value if they are the same
+#' * con: Optional The connection to use, if not provided use the same connection as the table
+#' * table: The table to access
+#' * key: The primary key to use as an identifier of the table (value in option)
+#' * value: The text to display or pick as the user
+#' * Use key==value if they are the same
 #'
 #' @slot typemap A list of the HTML input tags to generate per type
-#' @slot input A list of HTML input tags to override `typemap`
-#' @slot js The JS value to access currently the value is `UITable.{name}`
+#' @slot input A list of HTML input tags to override \code{typemap}
+#' @slot js The JS value to access currently the value is \code{UITable.{name}}
 #' @slot tbl The function to access the tbl, use this to modify the results or filter it
-#' @slot keys The primary keys in a list separated by "|,;:"
-#' @slot autoinc Does the first primary key use AUTO_INCREMENT?
+#' @slot keys The primary keys in a list separated by \code{|,;:}
+#' @slot autoinc Does the first primary key use \code{AUTO_INCREMENT}?
 #' @export
 #'
 methods::setClass(
@@ -70,7 +71,7 @@ methods::setClass(
   )
 );
 
-#'Vectorise class(pull(.data, var))
+#'Vectorise \code{class(pull(.data, var))}
 #'
 #'@param .data The table to pull from
 #'@param var The column to pull
@@ -82,14 +83,14 @@ pullclass=Vectorize(
 
 #' Create a UITable object for Database display and modification
 #'
-#' @param con A `pool` connection
+#' @param con A \code{\link{pool}} connection
 #' @param name The tale name to connect to
 #' @param types A list of the types of the columns, must name the columns
 #' @param typemap A list of the HTML input tags to generate per type
 #' @param opt A list of styles
-#' @param input A list of HTML input tags to override `typemap`
+#' @param input A list of HTML input tags to override \code{typemap}
 #'
-#' @returns A new UITable object
+#' @returns A new \code{\link{UITable}} object
 UITable = function(
     con,
     name,
@@ -162,7 +163,7 @@ UITable = function(
 
 #' Convert a tibble or tbl to a HTML table
 #'
-#' @param this A UITable object
+#' @param this A \code{\link{UITable}} object
 #' @return An HTML table
 #'
 #' Columns have the class of {name}-{col}
@@ -219,7 +220,7 @@ toTable=function(this){
 
       sel=tb|>
         dplyr::mutate(
-          x=glue::glue('<option value="{key}">{val}</option>')
+          x=glue::glue('<option value="{key}">{val}</option>') # TODO: Fix if <>'" are in data
         )|>
         dplyr::summarise(paste0(x, collapse=""))|>
         dplyr::pull()
@@ -227,7 +228,7 @@ toTable=function(this){
 
       li=tb|>
         dplyr::mutate(
-          x=glue::glue("'{key}':'{val}'")
+          x=glue::glue("'{key}':'{val}'") # TODO: Fix if <>'" are in data
         )|>
         dplyr::summarise(paste0(x, collapse=","))|>
         dplyr::pull()
@@ -301,42 +302,43 @@ toTable=function(this){
 }
 
 
-#' Creates a tabPanel with a title and the body of tableOutput with an id of id
+#' Creates a \code{\link{tabPanel}} with a title and the body of \code{\link{tableOutput}} with an id of id
 #' @param title The title of the tab to use
-#' @param id The id of the tableOutput
-#' @param value
+#' @param id The id of the \code{\link{tableOutput}}
+#' @param value The Shiny event value for tabset
 #' @param icon An icon to use
 tabTable = function(title, id, ..., value=title, icon = NULL){
   shiny::tabPanel(title, shiny::fluidRow(shiny::tableOutput(id)), ..., value , icon)
 }
 
 
-#' Creates a list of tabPanels
+#' Creates a list of \code{\link{tabPanels}}
 #' @param tabs The list of tabs to add
-#' @param id The id of the tabsetPanel
-#' @param .adv Use the long form (FALSE) or the short form (TRUE) for tabs
-#' Either in long or short format
-#' # Short format:
-#' A list of key value pairs
-#' key: The title and identifier for the tabPanel
-#' value: A UITable
+#' @param id The id of the \code{\link{tabsetPanel}}
+#' @param .adv Use the long form (\code{FALSE}) or the short form (\code{TRUE}) for tabs
 #'
-#' # Long form, more options
+#' Short format:
+#' A list of key value pairs
+#' * key:     The title and identifier for the tabPanel
+#' * value:   A UITable
+#'
+#' Long form, more options
 #' A list of title, id, and arguments to pass to tabPanel
-#' title: The title and identifier for the tabPanel
-#' id: The id to use for the tableOutput
-#' value: Optional The value that should be sent when tabsetPanel reports that this tab is selected.
-#' icon: Optional icon to appear on the tab. This attribute is only valid when using a tabPanel within a navbarPage().
+#' * title:  The title and identifier for the tabPanel
+#' * id:     The id to use for the tableOutput
+#' * value:  Optional The value that should be sent when tabsetPanel reports that this tab is selected.
+#' * icon:   Optional icon to appear on the tab.  This attribute is only valid when using a tabPanel within a navbarPage().
 #'
 #' @examples
 #'
 #' mainTables(
-#' list(CookLog=cook, CookItems=cookitems)
-#' , id="tabset")
+#'   list(CookLog=cook, CookItems=cookitems)
+#' , id="tabset"
+#' )
 #'
 #' mainTables(list(
-#' list(title="CookLog", id="CookLog"),
-#' list(title="CookItems", id="CookItems")
+#'   list(title="CookLog", id="CookLog"),
+#'   list(title="CookItems", id="CookItems")
 #' ), id="tabset", .adv=T)
 #'
 mainTables = function(..., id, .adv=F, .tabs=NULL){
@@ -365,7 +367,7 @@ mainTables = function(..., id, .adv=F, .tabs=NULL){
 #' Client side, and Set HTML table
 #' @param input The shiny input
 #' @param tab The name of the open tab
-#' @param set A list of tabPanels values and UITable objects as key value pairs
+#' @param set A list of \code{\link{tabPanels}} values and \code{\link{UITable}} objects as key value pairs
 
 tabJs = function(input, tab, set, .commitout=TRUE){
   # Get the current open tabPanels
@@ -385,9 +387,9 @@ tabJs = function(input, tab, set, .commitout=TRUE){
 #' Observe the changes of the tabs
 #'
 #' @param session A shiny session
-#' @param input A siny input
+#' @param input A Shiny input
 #' @param tab The tab id
-#' @param ... A list of tab values as keys and UITable objects as values
+#' @param ...,.tabs A list of tab values as keys and \code{\link{UITable}} objects as values
 observeTab = function(session, input, tab, ..., .commitout=TRUE, .tabs=NULL){
   if(is.null(.tabs))set = list(...)
   else set = .tabs

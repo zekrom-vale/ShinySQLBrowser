@@ -1,4 +1,14 @@
-procWhere = function(where, con, .comp="==", .op="&", .NAisNULL=TRUE){
+#' Process Where
+#'
+#' @param where
+#' @param con The \code{link{pool}} connection
+#' @param .comp Default comparator \code{equal ==}
+#' @param .op Default operator \code{and &&} excluded in last statement
+#' @param .NAisNULL Treats \code{NA} as \code{NULL}
+#'
+#' @return A partial SQL string of \code{id comp val op} like \code{ID == 1 and}
+#' @export
+procWhere = function(where, con, .comp="==", .op="and", .NAisNULL=TRUE){
   l=list()
   for(i in seq(1, length(where))){
     val = where[[i]]
@@ -74,7 +84,7 @@ procData = function(data, con, .NAisNULL=TRUE){
     paste(collapse=", ")
 }
 
-sendUpdate = function(where, data, table, con, .comp="==", .op="&"){
+sendUpdate = function(where, data, table, con, .comp="==", .op="and"){
   where = procWhere(where, con, .comp=.comp, .op=.op)
   data = procData(data, con)
 

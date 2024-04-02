@@ -1,3 +1,8 @@
+#'
+#' UIContainer A simple container to hold \code{\link{UITable}} objects
+#'
+#' @slot data The original data used to generate the \code{\link{UITable}}
+#' @slot tables A list of \code{\link{UITable}}
 methods::setClass(
   "UIContainer",
   slots = c(
@@ -10,6 +15,51 @@ methods::setClass(
   )
 );
 
+#' Generates a list of UITables with a configuration object
+#'
+#' @param data A Data Structure
+#'
+#' @return An object containing a list of UITables and the original data
+#' @export
+#'
+#' @section Data Structure:
+#' An R nested list with the flowing structure.
+#' It is recommended to use yaml and import it into R with \code{\link{read_yaml}}
+#'
+#' ```yaml
+#' <TableName>:
+#'   tab:
+#'     title: <TableName>
+#'     [value: null]
+#'     [icon: <Icon of the tab>]
+#'   con: <SQL connection>
+#'   name: <SQL table name>
+#'   id: <HTML ID of table>
+#'   [types:
+#'     <HTML input/select types>[...]]
+#'   opt: <option object>
+#'   [rows:
+#'     <row name>:
+#'       [width: <css width not implemented>]
+#'       input: <html input/select override>
+#'     <row name>:
+#'       [width: <css width not implemented>]
+#'       input:
+#'         [con: <SQL connection>]
+#'         table: <SQL Table>
+#'         key: <SQL column to use as a key>
+#'         val: <SQL column to use as a value>
+#'       [...]]
+#'     [js: <not implemented>]
+#'     [tbl: <function to modify the table>]
+#'     keys: <Primary keys of the table>
+#'   [...]
+#' ```
+#'
+#' @examples
+#' data = yaml::read_yaml("config.yaml")$tables
+#' container = UIContainer(data)
+#'
 UIContainer = function(data){
   env = parent.frame()
   tables = purrr::map(data, function(table){
@@ -35,6 +85,25 @@ UIContainer = function(data){
   methods::new("UIContainer", data=data, tables=tables)
 };
 
+
+#' Observes the switching of tabs to trigger loading of the tables
+#' Put this in the \code{\link{shinyApp}} \code{server} code
+#'
+#' @seealso \code{\link{UIContainer}}
+#' @seealso \code{\link{shinyApp}}
+#'
+#' @param session The Shiny session
+#' @param input The Shiny input
+#' @param container A container object of \code{\link{UITables}}
+#'
+#' @return  an observer reference class object
+#' @export
+#'
+#' @examples
+#' ui = bootstrapPage(
+#'   theme = bslib::bs_theme(version = 4), # Optional don't use 5 https://github.com/zekrom-vale/ShinySQLBrowser/issues/2
+#'   includeUITable(container)
+#' )
 observeSwitch = function(session, input, container){
   observeTab(
     session, input, "tabset",
@@ -43,12 +112,26 @@ observeSwitch = function(session, input, container){
   )
 }
 
-includeUITable = function(container){
+#' Includes js, css, shinyJS dependencies into the shiny UI
+#' Put this in the \code{\link{shinyApp}} \code{UI} code
+#'
+#' @param container A container object of UITables
+#' @param jqueryCss The jquery css to use.  Default: v3.3.4 via cloudflare cdnjs. On \code{NULL} exclude it
+#' @param jqueryJs The jquery js to use.  Default: v3.3.4 via cloudflare cdnjs. On \code{NULL} exclude it
+#'
+#' @return A list of UI HTML elements required for ShinySQLBrowser
+#' @export
+#'
+includeUITable = function(
+    container,
+    jqueryCss = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css",
+    jqueryJS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"
+  ){
   shiny::div(
   	htmltools::includeScript(system.file("tbl.js", package="ShinySQLBrowser")),
   	htmltools::includeScript(system.file("connection.js", package="ShinySQLBrowser")),
-  	htmltools::includeCSS("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"),
-  	htmltools::includeScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"),
+  	`if`(is.null(jqueryCss), NULL, htmltools::includeCSS(jqueryCss)),
+  	`if`(is.null(jqueryJs), NULL, htmltools::includeScript(jqueryJs)),
   	shinyjs::useShinyjs(),  # Include shinyjs
     mainTables(
       id = "tabset",
