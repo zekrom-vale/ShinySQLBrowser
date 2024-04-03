@@ -22,7 +22,7 @@ NULL
 #' @slot types A list of the types of the columns, must name the columns
 #' @slot opt A list of styles
 #'
-#' \code{
+#' ```R
 #'    td    = list(class="", collapse=" "),
 #'    tr    = list(class="", collapse=" "),
 #'    th    = list(class="", collapse=" "),
@@ -30,7 +30,7 @@ NULL
 #'    tbody = list(class="table-striped"),
 #'    thead = list(class=""),
 #'    use_this_tbl = c("force", "off", "on")
-#' }
+#' ```
 #' @slot typemap A list of the HTML input tags to generate per type
 #' If a list is passed instead of character it is used as a reference
 #' list(con=Work, table="people", key="ID", val="Name")
@@ -125,13 +125,14 @@ UITable = function(
   if(methods::is(con)!="Pool")
     warning("con is not a Pool, use `pool::dbPool()` not `DBI::dbConnect()` for stability")
 
+  cfg = getConfig()
   opt = utils::modifyList(
-    yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser"))$opt,
+    cfg$opt,
     opt
   )
 
   typemap = utils::modifyList(
-  	yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser"))$typemap,
+    cfg$typemap,
     typemap
   )
   tib=tbl(con, name)

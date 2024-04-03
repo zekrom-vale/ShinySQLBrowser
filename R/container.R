@@ -160,3 +160,66 @@ includeUITable = function(
     )
   )
 }
+
+getConfig = function(){
+  getOption(
+  	"SSQLB:Config",
+  	yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser"))
+  )
+}
+
+setConfig = function(data){
+	getConfig()|>
+		utils::modifyList(data)|>
+		options("SSQLB:Config" = _)
+}
+
+recGet = function(val, path){
+	if(length(path)==1)return(val[[path[1]]])
+	return(recGet(val[[path[1]]], path[2: length(path)]))
+}
+
+#' Experimental recursive get function
+#' Explores all \code{getOption} \code{.}'s like an object
+getConfigByName = function(name, prefix = "SSQLB:"){
+	#' Process order
+	#' root
+	#' root a
+	#' root a b
+	#' root a b c
+	rec = function(path){
+		# root
+		if(length(path)==1){
+			return(
+				utils::modifyList(
+					yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser")),
+					getOption(
+						glue::glue("{prefix}{path[[1]]}"),
+						list()
+					)
+				)
+			)
+		}
+		# upper is more general
+		upper = rec(path[1:length(path)-1]) # IE list(x=list(y=1)) || list(x=list(y=list(z=1)))
+		lower = getOption(
+			glue::glue("{prefix}{paste0(path, collapse='.')}"), # IE list(y=1) || list(x=list(y=list(z=1)))
+			list()
+		)
+		mvdLower = list()
+		mvdLower[[path[length(path)]]] = lower
+		return(
+			utils::modifyList(
+				upper,
+				mvdLower # More significant
+			)
+		)
+	}
+	name = stringr::str_split(name, "[.$-_]")
+	rec(name)|>
+		recGet(name)
+}
+
+setConfigByName = function(name, value){
+
+}
