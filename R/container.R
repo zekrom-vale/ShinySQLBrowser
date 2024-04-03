@@ -17,6 +17,8 @@ methods::setClass(
   )
 );
 
+CSSKEYS = c("width", "height")
+
 #' Generate UITables
 #'
 #' @description
@@ -76,6 +78,19 @@ UIContainer = function(data){
       r
     })|>
       purrr::discard(is.null)
+    css = purrr::imap(table$rows, function(val, col){
+    	kv=purrr::imap(val, function(css, key){
+    		`if`(
+    			key %in% CSSKEYS,
+    			glue::glue("{key}:{css};\n"),
+    			""
+    		)
+    	})|>
+    		glue::glue_collapse()
+    	glue::glue("<table$name>-<col>{<kv>}", .open = "<", .close = ">")
+    })|>
+    	glue::glue_collapse()
+
     UITable(
       get(table$con, envir = env),
       table$name,
@@ -86,7 +101,8 @@ UIContainer = function(data){
       input = input,
       js = table$js,
       tbl = `if`(is.null(table$tbl), dplyr::tbl, get(table$tbl, envir = env)),
-      keys = table$keys
+      keys = table$keys,
+      css = sass::sass(css)
     )
   })
   methods::new("UIContainer", data=data, tables=tables)
@@ -130,22 +146,22 @@ observeSwitch = function(session, input, container){
 #' Put this in the \code{\link{shinyApp}} \code{UI} code
 #'
 #' @param container A container object of UITables
-#' @param jqueryCss The jquery css to use.  Default: v3.3.4 via cloudflare cdnjs. On \code{NULL} exclude it
-#' @param jqueryJs The jquery js to use.  Default: v3.3.4 via cloudflare cdnjs. On \code{NULL} exclude it
+#' @param jqueryCSS The jquery css to use.  Default: v3.3.4 via cloudflare cdnjs. On \code{NULL} exclude it
+#' @param jqueryJS The jquery js to use.  Default: v3.3.4 via cloudflare cdnjs. On \code{NULL} exclude it
 #'
 #' @return A list of UI HTML elements required for ShinySQLBrowser
 #' @export
 #'
 includeUITable = function(
     container,
-    jqueryCss = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css",
+    jqueryCSS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css",
     jqueryJS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"
   ){
   shiny::div(
   	htmltools::includeScript(system.file("tbl.js", package="ShinySQLBrowser")),
   	htmltools::includeScript(system.file("connection.js", package="ShinySQLBrowser")),
-  	`if`(is.null(jqueryCss), NULL, htmltools::includeCSS(jqueryCss)),
-  	`if`(is.null(jqueryJs), NULL, htmltools::includeScript(jqueryJs)),
+  	`if`(is.null(jqueryCSS), NULL, htmltools::includeCSS(jqueryCSS)),
+  	`if`(is.null(jqueryJS), NULL, htmltools::includeScript(jqueryJS)),
   	shinyjs::useShinyjs(),  # Include shinyjs
     mainTables(
       id = "tabset",

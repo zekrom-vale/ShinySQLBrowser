@@ -48,10 +48,6 @@ cookFilter = function(con, name){
 data = yaml::read_yaml("config.yaml")$tables
 container = UIContainer(data)
 
-read_file("format.scss")|>
-  sass::sass()|>
-  write_file("format.css")
-
 
 # Define UI for application that creates a user interface for SQL tables
 ui = bootstrapPage(

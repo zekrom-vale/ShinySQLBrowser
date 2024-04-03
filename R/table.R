@@ -62,7 +62,8 @@ methods::setClass(
     js = "character",
     tbl = "function",
     keys = "character",
-    autoinc="logical"
+    autoinc = "logical",
+    css = "ANY"
   ),
   prototype = list(
     con = NULL,
@@ -76,7 +77,8 @@ methods::setClass(
     js = NA_character_,
     tbl = dplyr::tbl,
     keys = "",
-    autoinc=TRUE
+    autoinc = TRUE,
+    css = ""
   )
 );
 
@@ -108,13 +110,15 @@ UITable = function(
     con,
     name,
     id = NULL,
-    types=list(),
-    typemap=list(),
-    opt=list(),
-    input=list(),
-    js=NULL,
-    tbl=dplyr::tbl,
-    keys=""
+    types = list(),
+    typemap = list(),
+    opt = list(),
+    input = list(),
+    js = NULL,
+    tbl = dplyr::tbl,
+    keys = "",
+    autoinc = TRUE,
+    css = ""
   ){
 
   if(is.null(id))
@@ -158,7 +162,9 @@ UITable = function(
     input=input,
     js=`if`(is.null(js),glue::glue("UITable.{name}"),js),
     tbl=tbl,
-    keys=keys
+    keys=keys,
+    autoinc = autoinc,
+    css = css
   )
 
   for(i in 1:2){
@@ -301,6 +307,7 @@ toTable=function(this){
 
   # Glue together
   glue::glue(
+  	'<style>{this@css}</style>',
     this@opt$table$glue,
       '<template>',
         template,
