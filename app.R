@@ -66,7 +66,7 @@ server = function(input, output, session) {
     poolClose(Work)
     poolClose(CookLog)
     poolClose(SaladLog)
-    # quit(save = "no")
+    if(commandArgs()[1]!="RStudio")quit(save = "no")
   })
 }
 
