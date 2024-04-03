@@ -5,7 +5,7 @@ opt:
     glue: |-
       <td
       class="{{this@name}}-{col} {{this@opt$td$class}}"
-      data-col="{{this@name}}-{col}"
+      data-col="{{this@id}}-{col}"
       data-val="{x}">
       </td>
     templateglue: |-
@@ -65,10 +65,10 @@ opt:
     collapse: ' '
     glue: |-
       <th
-      class="{{this@name}}-{x} {{this@opt$th$class}}"
+      class="{{this@id}}-{x} {{this@opt$th$class}}"
       scope="col"
       data-type="{vd(this@types,x)}"
-      id="{{this@name}}-{x}"
+      id="{{this@id}}-{x}"
       data-vals="{vdn(input,x,2)}"
       data-col="{x}">
       {x}
