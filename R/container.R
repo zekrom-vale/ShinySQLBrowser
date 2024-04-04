@@ -253,7 +253,6 @@ setConfigByName = function(name, value){
 
 
 genFormat = function(tables, opt = getConfig()){
-	browser()
 	type = purrr::imap(opt$format_default, function(func, name){
 		glue::glue('"{name}": {func}')
 	})|>

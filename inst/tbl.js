@@ -47,7 +47,7 @@ function applyTypeFun(typefun, col, type, val){
 	if(typefun[col] !== undefined) return typefun[col](val)
 	if(typefun[type] !== undefined) return typefun[type](val)
 	typefun = evalName()
-	if(typefun[type] !== undefined) return typefun[type](type)
+	if(typefun[type] !== undefined) return typefun[type](val)
 	return val
 }
 
