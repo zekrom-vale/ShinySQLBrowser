@@ -156,13 +156,19 @@ observeSwitch = function(session, input, container){
 includeUITable = function(
     container,
     jqueryCSS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css",
-    jqueryJS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"
+    jqueryJS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js",
+    generateFormat = TRUE
   ){
   shiny::div(
   	htmltools::includeScript(system.file("tbl.js", package="ShinySQLBrowser")),
   	htmltools::includeScript(system.file("connection.js", package="ShinySQLBrowser")),
   	`if`(is.null(jqueryCSS), NULL, htmltools::includeCSS(jqueryCSS)),
   	`if`(is.null(jqueryJS), NULL, htmltools::includeScript(jqueryJS)),
+  	`if`(
+  		generateFormat,
+  		htmltools::tags$script(htmltools::HTML(genFormat(container@data))),
+  		NULL
+  	),
   	shinyjs::useShinyjs(),  # Include shinyjs
     mainTables(
       id = "tabset",
@@ -189,6 +195,10 @@ setConfig = function(data){
 	getConfig()|>
 		utils::modifyList(data)|>
 		options("SSQLB:Config" = _)
+}
+
+resetConnfig = function(){
+	options("SSQLB:Config" = NULL)
 }
 
 recGet = function(val, path){
@@ -239,4 +249,36 @@ getConfigByName = function(name, prefix = "SSQLB:"){
 
 setConfigByName = function(name, value){
 
+}
+
+
+genFormat = function(tables, opt = getConfig()){
+	browser()
+	type = purrr::imap(opt$format_default, function(func, name){
+		glue::glue('"{name}": {func}')
+	})|>
+		glue::glue_collapse(sep = ",\n")
+
+	col = purrr::map(tables, function(cols){
+		inner = purrr::imap(cols$rows, function(val, name){
+			glue::glue('"{name}": {val$format}')
+		})|>
+			purrr::discard(function(x){length(x)==0})|>
+			glue::glue_collapse(sep=",\n")
+		glue::glue(
+			"<cols$id>:{<inner>}",
+			.open = "<",
+			.close = ">"
+		)
+	})|>
+		glue::glue_collapse(sep = ",\n")
+
+	glue::glue(
+		"const UITable={
+<type>,
+<col>
+}",
+		.open = "<",
+		.close = ">"
+	)
 }

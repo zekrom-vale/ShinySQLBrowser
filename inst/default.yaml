@@ -1,17 +1,19 @@
+# Note: name should not be used for anything
+
 opt:
   td:
     class: ''
     collapse: ' '
     glue: |-
       <td
-      class="{{this@name}}-{col} {{this@opt$td$class}}"
+      class="{{this@id}}-{col} {{this@opt$td$class}}"
       data-col="{{this@id}}-{col}"
       data-val="{x}">
       </td>
     templateglue: |-
       <td
-      class="{{this@name}}-{col} {{this@opt$td$class}}"
-      data-col="{{this@name}}-{col}">
+      class="{{this@id}}-{col} {{this@opt$td$class}}"
+      data-col="{{this@id}}-{col}">
       </td>
     remove:
       text: |-

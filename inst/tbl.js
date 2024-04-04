@@ -1,35 +1,7 @@
 /*eslint-env jquery*/
 /*global console, setTimeout, port, crudport, build, buildWhere*/
 "use strict";
-const UITable={
-	items:{
-		Method : x=>
-			($("#items-Method").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
-	},
-	cook:{
-		Date : x=>
-			new Date(`${x}T18:00:00`).toLocaleDateString(),
-		"hms difftime" : x=>
-			new Date(`0000-01-01T${x}`).toLocaleTimeString(),
-		ItemID: x=>
-			($("#cook-ItemID").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1],
-		Person:x=>
-			($("#cook-Person").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
-	},
-	salad:{
-		Date : x=>
-			new Date(`${x}T18:00:00`).toLocaleDateString(),
-		"hms difftime" : x=>
-			new Date(`0000-01-01T${x}`).toLocaleTimeString(),
-		SaladID: x=>
-			($("#salad-SaladID").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1],
-		Person:x=>
-			($("#salad-Person").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
-	},
-	people:{
-		
-	}
-};
+
 
 // l={a:{b:{c:{d:{e:1}}}}}
 // evalName("l.a.b.c.d.e")
