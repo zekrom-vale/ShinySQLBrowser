@@ -173,9 +173,10 @@ includeUITable = function(
     mainTables(
       id = "tabset",
       .adv = T,
-      .tabs= purrr::map(container@data, function(table){
+      .tabs= purrr::imap(container@data, function(table, name){
         x=table$tab|>
           purrr::discard(is.null)
+        if(is.null(x$value))x$value = name
         x$id = table$id
         return(x)
       })|>

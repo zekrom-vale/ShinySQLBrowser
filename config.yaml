@@ -8,10 +8,10 @@ opt:
 tables:
     CookLog:
         tab:
-            title: CookLog # The title and identifier for the tabPanel
+            title: NotCookLog # The title for the tabPanel
             # id will be fetched from outer
-            value: null
-            icon: null
+            value: null # The identifier for the tabPanel DON'T CHNAGE
+            icon: null # The icon for the tabPanel
         con: CookLog # Passed through get()
         name: cook
         id: Cook
