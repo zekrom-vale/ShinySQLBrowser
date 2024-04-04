@@ -1,0 +1,39 @@
+---
+
+typemap:
+    numeric: <input type="number" min="0" max="2147483647">
+    integer: <input type="number" min="0" max="2147483647" step="1">
+
+tables:
+    mtcars:
+        tab:
+            title: mtcars # The title for the tabPanel
+        con: mydb # Passed through get()
+        name: mtcars
+        id: mtcars
+        rows:
+            id:
+                width: 80px
+                input: <input type="number" disabled>
+            names:
+                width: 200px
+            cyl:
+                width: 80px
+                input: <input type="number" min="-2147483648" max="2147483647">
+            disp:
+                width: 80px
+            hp:
+                width: 80px
+            drat:
+                width: 80px
+            wt:
+                width: 80px
+            qsec:
+                width: 80px
+            vs:
+                width: 80px
+            gear:
+                width: 80px
+            carb:
+                width: 80px
+        keys: id

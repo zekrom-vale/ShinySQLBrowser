@@ -1,4 +1,3 @@
-#
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
 #
@@ -6,6 +5,7 @@
 #
 #    https://shiny.posit.co/
 #
+# Note: The data used is not currently published
 
 library(DBI)
 library(odbc)
