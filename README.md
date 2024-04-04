@@ -45,7 +45,7 @@ It returns a container object containing the generated `UITables`.
     keys: <Primary keys of the table>
   [...]
 ```
-See [`config.yaml:tables`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/config.yaml) for an example of the table data
+See [`config.yaml:tables`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/examples/sqlite/config.yaml) for an example of the table data
 
 ### Paramater 2: Optional `opt`
 ```yaml
@@ -53,7 +53,7 @@ See [`config.yaml:tables`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/m
     <type>: <JS function>
     [...]]
 ```
-See [`config.yaml:otp`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/config.yaml) for an example of the simple options data.  For more advanced configuration that is default to generating the HTML, see [`default.yaml`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/inst/default.yaml).
+See [`config.yaml:otp`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/examples/sqlite/config.yaml) for an example of the simple options data.  For more advanced configuration that is default to generating the HTML, see [`default.yaml`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/inst/default.yaml).
 
 
 ## HTML Generation with  `includeUITable(container)`
@@ -87,5 +87,5 @@ shinyApp(server = server)
 ```
 
 ## Example
-See [`app.R`](https://github.com/zekrom-vale/ShinySQLBrowser/blob/main/app.R) for an example I have been testing with.
-I will eventualy publish a sanitized version of this data.
+See [/examples](https://github.com/zekrom-vale/ShinySQLBrowser/tree/main/examples) for more examples.
+I will eventualy publish a sanitized version of the logs data.
