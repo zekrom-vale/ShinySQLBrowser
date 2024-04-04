@@ -93,13 +93,13 @@ opt:
     class: ''
     glue: <thead class="{{this@opt$thead$class}}">
   use_this_tbl: 'off'
-typemap:
-  # mariaDB
-  integer64: <input type="number" min="-9223372036854775808" max="9223372036854775807" step="1">
-  integer: <input type="number" min="-2147483648" max="2147483647" step="1">
-  Date: <input type="date">
-  hms difftime: <input type="time">
-  character: <input type="text">
-  double: <input type="number" min="-2147483648" max="2147483647">
-  # SQLite
-  numeric: <input type="number" min="-2147483648" max="2147483647">
+  typemap:
+    # mariaDB
+    integer64: <input type="number" min="-9223372036854775808" max="9223372036854775807" step="1">
+    integer: <input type="number" min="-2147483648" max="2147483647" step="1">
+    Date: <input type="date">
+    hms difftime: <input type="time">
+    character: <input type="text">
+    double: <input type="number" min="-2147483648" max="2147483647">
+    # SQLite
+    numeric: <input type="number" min="-2147483648" max="2147483647">

@@ -57,7 +57,6 @@ methods::setClass(
     name = "character",
     types="list",
     opt = "list",
-    typemap = "list",
     input = "list",
     js = "character",
     tbl = "function",
@@ -72,7 +71,6 @@ methods::setClass(
     name = NA_character_,
     types=list(),
     opt = list(),
-    typemap = list(),
     input = list(),
     js = NA_character_,
     tbl = dplyr::tbl,
@@ -101,7 +99,6 @@ pullclass=Vectorize(
 #' @param con A \code{\link{pool}} connection
 #' @param name The tale name to connect to
 #' @param types A list of the types of the columns, must name the columns
-#' @param typemap A list of the HTML input tags to generate per type
 #' @param opt A list of styles
 #' @param input A list of HTML input tags to override \code{typemap}
 #'
@@ -111,7 +108,6 @@ UITable = function(
     name,
     id = NULL,
     types = list(),
-    typemap = list(),
     opt = list(),
     input = list(),
     js = NULL,
@@ -134,11 +130,6 @@ UITable = function(
     cfg$opt,
     opt
   )
-
-  typemap = utils::modifyList(
-    cfg$typemap,
-    typemap
-  )
   tib=tbl(con, name)
 
   types = utils::modifyList(
@@ -147,7 +138,7 @@ UITable = function(
   )
 
   input = utils::modifyList(
-    as.list(vd(typemap, types)),
+    as.list(vd(getConfig()$typemap, types)),
     input
   )
 
@@ -158,7 +149,6 @@ UITable = function(
     id=id,
     types=types,
     opt=opt,
-    typemap=typemap,
     input=input,
     js=`if`(is.null(js),glue::glue("UITable.{id}"),js),
     tbl=tbl,

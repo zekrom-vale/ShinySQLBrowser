@@ -18,7 +18,7 @@ mtcars|>
 	dbWriteTable(mydb, "mtcars", value = _)
 
 data = yaml::read_yaml("config.yaml")
-container = UIContainer(data$tables, data)
+container = UIContainer(data$tables, data$opt)
 
 # Define UI for application that creates a user interface for SQL tables
 ui = bootstrapPage(

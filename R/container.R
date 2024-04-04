@@ -97,7 +97,6 @@ UIContainer = function(data, opt=NULL){
       table$name,
       id = table$id,
       types = retnn(table$types, list()),
-      typemap = retnn(table$typemap, list()),
       opt = retnn(table$opt, list()),
       input = input,
       js = table$js,

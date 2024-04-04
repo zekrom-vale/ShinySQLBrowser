@@ -1,8 +1,8 @@
 ---
-
-typemap:
-    numeric: <input type="number" min="0" max="2147483647">
-    integer: <input type="number" min="0" max="2147483647" step="1">
+opt:
+    typemap:
+        numeric: <input type="number" min="0" max="2147483647">
+        integer: <input type="number" min="0" max="2147483647" step="1">
 
 tables:
     mtcars:
