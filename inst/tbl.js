@@ -8,6 +8,8 @@
 function evalName(name=undefined, sep="."){
 	if(name===undefined)return UITable
 	var list=name.split(sep);
+	// if(!/\w+/i.test(root)) throw new Error(`Not Safe ${root}`)
+	// var v=eval(list.shift())[list.shift()];
 	list.shift();
 	var v=UITable[list.shift()];
 	while(list.length>0){
