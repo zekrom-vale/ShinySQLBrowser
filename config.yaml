@@ -1,5 +1,10 @@
 ---
 
+opt:
+    format_default:
+        Date: x=>new Date(`${x}T18:00:00`).toLocaleDateString()
+        hms difftime: x=>new Date(`0000-01-01T${x}`).toLocaleTimeString()
+
 tables:
     CookLog:
         tab:
@@ -26,6 +31,7 @@ tables:
                     table: items
                     key: ID
                     val: Item
+                format: x=>($("#cook-ItemID").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
             Temp:
                 width: 100px
             Person:
@@ -35,6 +41,7 @@ tables:
                     table: People
                     key: ID
                     val: Name
+                format: x=>($("#cook-Person").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
             Comment:
                 width: 300px
         js: null
@@ -69,6 +76,7 @@ tables:
                     table: methods
                     key: ID
                     val: Method
+                format: x=>($("#items-Method").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
             Comment:
                 width: 300px
         js: null
@@ -129,6 +137,7 @@ tables:
                     table: items
                     key: ID
                     val: Salad
+                format: x=>($("#salad-SaladID").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
             MeatAge:
                 width: 100px
             Expires:
@@ -142,6 +151,7 @@ tables:
                     table: people
                     key: ID
                     val: Name
+                format: x=>($("#salad-Person").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
             Comment:
                 width: 300px
         js: null

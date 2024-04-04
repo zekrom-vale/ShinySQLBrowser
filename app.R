@@ -45,8 +45,8 @@ cookFilter = function(con, name){
     #filter(Date==lubridate::today()-3)|>
     as_tibble()
 }
-data = yaml::read_yaml("config.yaml")$tables
-container = UIContainer(data)
+data = yaml::read_yaml("config.yaml")
+container = UIContainer(data$tables, data$opt)
 
 
 # Define UI for application that creates a user interface for SQL tables

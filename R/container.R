@@ -69,7 +69,8 @@ CSSKEYS = c("width", "height")
 #' data = yaml::read_yaml("config.yaml")$tables
 #' container = UIContainer(data)
 #'
-UIContainer = function(data){
+UIContainer = function(data, opt=NULL){
+  if(!is.null(opt))setConfig(opt)
   env = parent.frame()
   tables = purrr::map(data, function(table){
     input = purrr::map(table$rows, function(x){

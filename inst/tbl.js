@@ -33,7 +33,8 @@ const UITable={
 
 // l={a:{b:{c:{d:{e:1}}}}}
 // evalName("l.a.b.c.d.e")
-function evalName(name, sep="."){
+function evalName(name=undefined, sep="."){
+	if(name===undefined)return UITable
 	var list=name.split(sep);
 	list.shift();
 	var v=UITable[list.shift()];
@@ -70,6 +71,14 @@ function write(tbl, el, val){
 		render(tbl, el, val);
 }
 
+function applyTypeFun(typefun, col, type, val){
+	if(typefun[col] !== undefined) return typefun[col](val)
+	if(typefun[type] !== undefined) return typefun[type](val)
+	typefun = evalName()
+	if(typefun[type] !== undefined) return typefun[type](type)
+	return val
+}
+
 function render(tbl, el, val=undefined){
 	if(val===null)el.append("<div></div>");
 	else{
@@ -79,12 +88,7 @@ function render(tbl, el, val=undefined){
 		let col=head.data("col");
 		let type=head.data("type");
 		let typefun=evalName(tbl.find("table").data("js"));
-		let txt;
-		if(typefun[col] === undefined){
-			if(typefun[type]=== undefined)txt=val;
-			else txt=typefun[type](val);
-		}
-		else txt=typefun[col](val);
+		let txt = applyTypeFun(typefun, col, type, val)
 		el.append($(`<div>${escapeHTML(txt)}</div>`));
 	}
 }
