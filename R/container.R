@@ -191,10 +191,13 @@ includeUITable = function(
 }
 
 getConfig = function(){
-  getOption(
-  	"SSQLB:Config",
-  	yaml::read_yaml(system.file("default.yaml", package = "ShinySQLBrowser"))
-  )
+  opt = getOption("SSQLB:Config", NULL)
+  if(is.null(opt)){
+  	opt = yaml::read_yaml(system.file("default.yaml", package = "ShinySQLBrowser"))
+  	options("SSQLB:Config" = opt)
+  	return(opt)
+  }
+  else return(opt)
 }
 
 setConfig = function(data){
