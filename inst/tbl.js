@@ -255,7 +255,7 @@ async function discard(tbl, tr, port){
 function main(tbl, id, onClickOff="commit"){
 	//Add new port
 	var port=new crudport(id);
-	console.log(`Added port ${id}: `, port);
+	if(window.message)console.log(`Added port ${id}: `, port);
 	tbl.find("td:not(.ecl)").each(function(){render(tbl, $(this))});
 	
 	mainrow(tbl, port, tbl.find("tr"), onClickOff);

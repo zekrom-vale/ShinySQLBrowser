@@ -203,11 +203,12 @@ sendCreate = function(data, keys, table, con, .autoinc = TRUE){
 #' @export
 #'
 observer = function(session, input, id, func){
-  message(glue::glue("Adding observer {id}"))
+  msg = getConfig()$opt$message
+  if(msg)message(glue::glue("Adding observer {id}"))
   shiny::observeEvent(input[[id]], {
-    message(glue::glue("{id} recived {input[[id]]}"))
+  	if(msg)message(glue::glue("{id} recived {input[[id]]}"))
     data = func(input[[id]])
-    message(glue::glue("seding message {data}"))
+    if(msg)message(glue::glue("seding message {data}"))
     session$sendCustomMessage(id, jsonlite::toJSON(data))
   })
 }
@@ -221,8 +222,8 @@ observer = function(session, input, id, func){
 #'
 #' @export
 tableObserver = function(session, input, id, uitable, .comp = "==", .op = "&"){
-  observer(session, input, id, function(message){
-    if(purrr::is_empty(message$where)&&purrr::is_empty(message$data))return(
+  observer(session, input, id, function(msg){
+    if(purrr::is_empty(msg$where)&&purrr::is_empty(msg$data))return(
       list(status = "reject", effect = list(error = "Nothing Sent"))
     )
 
@@ -234,25 +235,25 @@ tableObserver = function(session, input, id, uitable, .comp = "==", .op = "&"){
     #  data=list(
     #    col1=val1, col2=val2, ... coln=valn
     #  )
-    switch (message$action,
+    switch (msg$action,
       "create" = {
         return(
-          sendCreate(message$data, uitable@keys, uitable@name, uitable@con, .autoinc = uitable@autoinc)
+          sendCreate(msg$data, uitable@keys, uitable@name, uitable@con, .autoinc = uitable@autoinc)
         )
       },
       "update" = {
         return(
-          sendUpdate(message$where, message$data, uitable@name, uitable@con, .comp = .comp, .op = .op)
+          sendUpdate(msg$where, msg$data, uitable@name, uitable@con, .comp = .comp, .op = .op)
         )
       },
       "remove" = {
         return(
-          sendRemove(message$where, uitable@name, uitable@con, .comp = .comp, .op = .op)
+          sendRemove(msg$where, uitable@name, uitable@con, .comp = .comp, .op = .op)
         )
       },
       "read" = {
         return(
-          sendRead(message$where, uitable@name, uitable@con, .comp = .comp, .op = .op)
+          sendRead(msg$where, uitable@name, uitable@con, .comp = .comp, .op = .op)
         )
       }
     )

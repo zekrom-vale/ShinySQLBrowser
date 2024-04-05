@@ -199,8 +199,10 @@ toTable = function(this){
 
   tib = this@tbl(this@con, this@name)|>
     dplyr::as_tibble()
-  shinyjs::logjs(glue::glue("{this@conname}.{this@name}"))
-  shinyjs::logjs(tib)
+  if(getConfig()$opt$message){
+    shinyjs::logjs(glue::glue("{this@conname}.{this@name}"))
+    shinyjs::logjs(tib)
+  }
   col_index = function(col){
     purrr::detect_index(colnames(tib), ~.==col)
   }

@@ -283,7 +283,8 @@ genFormat = function(tables, opt = getConfig()$opt){
 		glue::glue_collapse(sep = ",\n")
 
 	glue::glue(
-		"const UITable={
+		"window.message = <stringr::str_to_lower(getConfig()$opt$message)>;
+const UITable={
 <type>,
 <col>
 }",

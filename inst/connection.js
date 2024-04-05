@@ -14,10 +14,10 @@ class port{
 	
 	async #innersend(senddata){
 		this.ready=false;
-		console.log("sending", senddata);
+		if(window.message)console.log("sending", senddata);
 		this.#rawsend(senddata);
 		let recdata=await this.#rawrecive();
-		console.log("got", recdata);
+		if(window.message)console.log("got", recdata);
 		this.ready=true;
 		return recdata;
 	}
