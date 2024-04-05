@@ -13,27 +13,33 @@ tables:
         id: mtcars
         rows:
             id:
-                width: 80px
+                width: 60px
                 input: <input type="number" disabled>
+            car:
+                width: 300px
+            mpg:
+                width: 60px
             names:
                 width: 200px
             cyl:
-                width: 80px
+                width: 60px
                 input: <input type="number" min="-2147483648" max="2147483647">
             disp:
-                width: 80px
+                width: 60px
             hp:
-                width: 80px
+                width: 60px
             drat:
-                width: 80px
+                width: 60px
             wt:
-                width: 80px
+                width: 60px
             qsec:
-                width: 80px
+                width: 60px
             vs:
-                width: 80px
+                width: 60px
             gear:
-                width: 80px
+                width: 60px
             carb:
-                width: 80px
+                width: 60px
+            am:
+                width: 60px
         keys: id

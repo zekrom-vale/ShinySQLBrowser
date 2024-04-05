@@ -88,7 +88,13 @@ UIContainer = function(data, opt=NULL){
     		)
     	})|>
     		glue::glue_collapse()
-    	glue::glue("<table$id>-<col>{<kv>}", .open = "<", .close = ">")
+    	glue::glue(
+    		".<table$id>-<col> div,
+.<table$id>-<col> input,
+.<table$id>-<col> select{<kv>}",
+    		.open = "<",
+    		.close = ">"
+    	)
     })|>
     	glue::glue_collapse()
 
