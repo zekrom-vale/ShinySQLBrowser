@@ -94,6 +94,7 @@ opt:
     glue: <thead class="{{this@opt$thead$class}}">
   use_this_tbl: 'off'
   message: off
+  cssExclude: [input, css, format]
   typemap:
     # mariaDB
     integer64: <input type="number" min="-9223372036854775808" max="9223372036854775807" step="1">

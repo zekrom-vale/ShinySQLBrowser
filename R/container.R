@@ -17,7 +17,6 @@ methods::setClass(
   )
 );
 
-CSSKEYS = c("width", "height")
 
 #' Generate UITables
 #'
@@ -69,10 +68,9 @@ CSSKEYS = c("width", "height")
 #' data = yaml::read_yaml("config.yaml")$tables
 #' container = UIContainer(data)
 #'
-UIContainer = function(data, opt = NULL, .resetCfg = TRUE){
+UIContainer = function(data, opt = NULL, .resetCfg = TRUE, env = parent.frame()){
   if(.resetCfg) resetConnfig()
   if(!is.null(opt))setConfig(opt)
-  env = parent.frame()
   tables = purrr::map(data, function(table){
     input = purrr::map(table$rows, function(x){
       r = x$input
@@ -83,14 +81,19 @@ UIContainer = function(data, opt = NULL, .resetCfg = TRUE){
     css = purrr::imap(table$rows, function(val, col){
     	kv = purrr::imap(val, function(css, key){
     		`if`(
-    			key %in% CSSKEYS,
+    			!key %in% getConfig()$opt$cssExclude,
     			glue::glue("{key}:{css};\n"),
     			""
     		)
     	})|>
     		glue::glue_collapse()
+    	if(!is.null(val$css)){
+    		css = get(val$css, envir = env)(glue::glue(".{table$id}-{col}"), table$id, col)
+    	}
+    	else css = ""
     	glue::glue(
-    		".<table$id>-<col> div,
+    		"<css>
+.<table$id>-<col> div,
 .<table$id>-<col> input,
 .<table$id>-<col> select{<kv>}",
     		.open = "<",

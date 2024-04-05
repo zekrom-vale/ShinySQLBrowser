@@ -161,12 +161,12 @@ UITable = function(
     this@opt = recursivefor(
       this@opt,
       function(x, i){
-        if(typeof(x)!="character")return(x)
+      	if(length(x)>1) return(x)
+        if(typeof(x)!="character") return(x)
         return(glue::glue(x, .open = "{{", .close = "}}"))
       }
     )
   }
-
   this
 };
 
