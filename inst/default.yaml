@@ -1,71 +1,82 @@
-# Note: name should not be used for anything
+---
+
+# WARNING Modifying this data may break things
+# A lot of values are used by ShinySQLBrowser and will break things if removed or modified
+# Change one thing at a time and if they break change it back
+# NEVER change "Critical keys" or anything that says "Do not remove anything"
+# It is recomended to overide these values in `config.yaml` and not here, just add an object otp
+# Don't modify anything unless you know what you are doing
+# {{}} is evaluated at the start
+# {} is evaluated at table generation
+
+# Note: name should not be used for anything as it is the SQL table connected, use id instead
 
 opt:
-  td:
+  td: # Cells
     class: ''
     collapse: ' '
-    glue: |-
+    glue: |- # Critical keys class={{this@id}}-{col}, data-col="{{this@id}}-{col}", data-val="{x}"
       <td
       class="{{this@id}}-{col} {{this@opt$td$class}}"
       data-col="{{this@id}}-{col}"
       data-val="{x}">
       </td>
-    templateglue: |-
+    templateglue: |- # Critical keys class={{this@id}}-{col}, data-col="{{this@id}}-{col}"
       <td
       class="{{this@id}}-{col} {{this@opt$td$class}}"
       data-col="{{this@id}}-{col}">
       </td>
-    remove:
-      text: |-
+    remove:  # The remove button 
+      text: |- # Critical keys class="remove"
         <button type="button" class="remove btn btn-danger" aria-label="Remove">
         {{bsicons::bs_icon("eraser-fill")}}
         </button>
       class: ''
-      glue: |-
+      glue: |- # Critical keys class="elc remove"
         <td class="ecl remove {{this@opt$td$remove$class}}">
         {{this@opt$td$remove$text}}
         </td>
-    discard:
-      text: |-
+    discard: # The discard button 
+      text: |- # Critical keys class="discard"
         <button type="button" class="discard btn btn-warning" aria-label="Discard">
         {{bsicons::bs_icon("x-circle-fill")}}
         </button>
       class: ''
-      glue: |-
+      glue: |- # Critical keys class="elc discard"
         <td class="ecl discard {{this@opt$td$discard$class}}">
         {{this@opt$td$discard$text}}
         </td>
-    commit:
-      text: |-
+    commit: # The commit button 
+      text: |- # Critical keys class="commit"
         <button type="button" class="commit btn btn-success" aria-label="Commit">
         {{bsicons::bs_icon("play-fill")}}
         </button>
       class: ''
-      glue: |-
+      glue: |- # Critical keys class="elc commit"
         <td class="ecl commit {{this@opt$td$commit$class}}">
         {{this@opt$td$commit$text}}
         </td>
-  tr:
+  tr: # Rows
     class: ''
     collapse: ' '
-    glue: |-
+    glue: |- # Critical keys row; Remove this@opt$td$*$glue to remove commit, discard, or remove
       <tr class="{{this@opt$tr$class}}">
       {row}
       {{this@opt$td$commit$glue}}
       {{this@opt$td$discard$glue}}
       {{this@opt$td$remove$glue}}
       </tr>
-    templateglue: |-
+    templateglue: |- # Critical keys template class=new-tr; Remove this@opt$td$*$glue to remove commit, discard, or remove
       <tr class="{{this@opt$tr$class}} new-tr">
       {template}
       {{this@opt$td$commit$glue}}
       {{this@opt$td$discard$glue}}
       {{this@opt$td$remove$glue}}
       </tr>
-  th:
+  th: # Headers
     class: ''
     collapse: ' '
-    glue: |-
+    glue: |- # Do not remove anything
       <th
       class="{{this@id}}-{x} {{this@opt$th$class}}"
       scope="col"
@@ -78,7 +89,7 @@ opt:
       </th>
   table:
     class: table
-    glue: |-
+    glue: |- # Do not remove anything
       <table
       class="{{this@opt$table$class}}"
       id="{{this@id}}-table"
@@ -86,22 +97,22 @@ opt:
       data-port="{{this@id}}"
       data-keys="{{this@keys}}"
       >
-  tbody:
+  tbody: # Table body having tr's and td's
     class: table-striped
     glue: <tbody class="{{this@opt$tbody$class}}">
-  thead:
+  thead: # Table head having th's and td's
     class: ''
     glue: <thead class="{{this@opt$thead$class}}">
   use_this_tbl: 'off'
-  message: off
-  cssExclude: [input, css, format]
-  typemap:
+  message: off # Log messages for debugging?
+  cssExclude: [input, css, format] # Things to exclude from CSS keys, Don't change
+  typemap: # Default types to use if you see undefined/null something here is missing
     # mariaDB
     integer64: <input type="number" min="-9223372036854775808" max="9223372036854775807" step="1">
     integer: <input type="number" min="-2147483648" max="2147483647" step="1">
     Date: <input type="date">
     hms difftime: <input type="time">
     character: <input type="text">
-    double: <input type="number" min="-2147483648" max="2147483647">
+    double: &double '<input type="number" min="-2147483648" max="2147483647">'
     # SQLite
-    numeric: <input type="number" min="-2147483648" max="2147483647">
+    numeric: *double
