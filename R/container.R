@@ -69,7 +69,7 @@ CSSKEYS = c("width", "height")
 #' data = yaml::read_yaml("config.yaml")$tables
 #' container = UIContainer(data)
 #'
-UIContainer = function(data, opt=NULL){
+UIContainer = function(data, opt = NULL){
   if(!is.null(opt))setConfig(opt)
   env = parent.frame()
   tables = purrr::map(data, function(table){
@@ -80,7 +80,7 @@ UIContainer = function(data, opt=NULL){
     })|>
       purrr::discard(is.null)
     css = purrr::imap(table$rows, function(val, col){
-    	kv=purrr::imap(val, function(css, key){
+    	kv = purrr::imap(val, function(css, key){
     		`if`(
     			key %in% CSSKEYS,
     			glue::glue("{key}:{css};\n"),
@@ -111,7 +111,7 @@ UIContainer = function(data, opt=NULL){
       css = sass::sass(css)
     )
   })
-  methods::new("UIContainer", data=data, tables=tables)
+  methods::new("UIContainer", data = data, tables = tables)
 };
 
 
@@ -136,11 +136,11 @@ UIContainer = function(data, opt=NULL){
 #'   theme = bslib::bs_theme(version = 4), # Optional don't use 5 https://github.com/zekrom-vale/ShinySQLBrowser/issues/2
 #'   includeUITable(container)
 #' )
-observeSwitch = function(session, input, container, .onClickOff="commit"){
+observeSwitch = function(session, input, container, .onClickOff = "commit"){
   observeTab(
     session, input, "tabset",
-    .onClickOff=.onClickOff,
-    .tabs=container@tables
+    .onClickOff = .onClickOff,
+    .tabs = container@tables
   )
 }
 
@@ -165,8 +165,8 @@ includeUITable = function(
     generateFormat = TRUE
   ){
   shiny::div(
-  	htmltools::includeScript(system.file("tbl.js", package="ShinySQLBrowser")),
-  	htmltools::includeScript(system.file("connection.js", package="ShinySQLBrowser")),
+  	htmltools::includeScript(system.file("tbl.js", package = "ShinySQLBrowser")),
+  	htmltools::includeScript(system.file("connection.js", package = "ShinySQLBrowser")),
   	`if`(is.null(jqueryCSS), NULL, htmltools::includeCSS(jqueryCSS)),
   	`if`(is.null(jqueryJS), NULL, htmltools::includeScript(jqueryJS)),
   	`if`(
@@ -177,9 +177,9 @@ includeUITable = function(
   	shinyjs::useShinyjs(),  # Include shinyjs
     mainTables(
       id = "tabset",
-      .adv = T,
-      .tabs= purrr::imap(container@data, function(table, name){
-        x=table$tab|>
+      .adv = TRUE,
+      .tabs = purrr::imap(container@data, function(table, name){
+        x = table$tab|>
           purrr::discard(is.null)
         if(is.null(x$value))x$value = name
         x$id = table$id
@@ -193,7 +193,7 @@ includeUITable = function(
 getConfig = function(){
   getOption(
   	"SSQLB:Config",
-  	yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser"))
+  	yaml::read_yaml(system.file("default.yaml", package = "ShinySQLBrowser"))
   )
 }
 
@@ -225,7 +225,7 @@ getConfigByName = function(name, prefix = "SSQLB:"){
 		if(length(path)==1){
 			return(
 				utils::modifyList(
-					yaml::read_yaml(system.file("default.yaml", package="ShinySQLBrowser")),
+					yaml::read_yaml(system.file("default.yaml", package = "ShinySQLBrowser")),
 					getOption(
 						glue::glue("{prefix}{path[[1]]}"),
 						list()
@@ -234,9 +234,9 @@ getConfigByName = function(name, prefix = "SSQLB:"){
 			)
 		}
 		# upper is more general
-		upper = rec(path[1:length(path)-1]) # IE list(x=list(y=1)) || list(x=list(y=list(z=1)))
+		upper = rec(path[1:length(path)-1]) # IE list(x = list(y = 1)) || list(x = list(y = list(z = 1)))
 		lower = getOption(
-			glue::glue("{prefix}{paste0(path, collapse='.')}"), # IE list(y=1) || list(x=list(y=list(z=1)))
+			glue::glue("{prefix}{paste0(path, collapse = '.')}"), # IE list(y = 1) || list(x = list(y = list(z = 1)))
 			list()
 		)
 		mvdLower = list()
@@ -269,7 +269,7 @@ genFormat = function(tables, opt = getConfig()){
 			glue::glue('"{name}": {val$format}')
 		})|>
 			purrr::discard(function(x){length(x)==0})|>
-			glue::glue_collapse(sep=",\n")
+			glue::glue_collapse(sep = ",\n")
 		glue::glue(
 			"<cols$id>:{<inner>}",
 			.open = "<",

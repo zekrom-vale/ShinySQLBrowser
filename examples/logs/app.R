@@ -16,28 +16,28 @@ library(shiny)
 library(shinyjs)
 library(ShinySQLBrowser)
 
-user= 'root'
-password="RayLVM"
+user = 'root'
+password = "RayLVM"
 
 CookLog <- dbPool(
   drv = RMariaDB::MariaDB(),
-  password=password,
-  user=user,
-  dbname ='CookLog'
+  password = password,
+  user = user,
+  dbname = 'CookLog'
 )
 
 SaladLog <- dbPool(
   drv = RMariaDB::MariaDB(),
-  password=password,
-  user=user,
-  dbname ='SaladLog'
+  password = password,
+  user = user,
+  dbname = 'SaladLog'
 )
 
 Work <- dbPool(
   drv = RMariaDB::MariaDB(),
-  password=password,
-  user=user,
-  dbname ='Work'
+  password = password,
+  user = user,
+  dbname = 'Work'
 )
 
 cookFilter = function(con, name){

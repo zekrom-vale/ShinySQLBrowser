@@ -13,22 +13,22 @@
 #'
 #' @return A partial SQL string of \code{id comp val op} like \code{ID == 1 and}
 #' @export
-procWhere = function(where, con, .comp="==", .op="and", .NAisNULL=TRUE){
-  l=list()
+procWhere = function(where, con, .comp = "==", .op = "and", .NAisNULL = TRUE){
+  l = list()
   for(i in seq(1, length(where))){
     val = where[[i]]
-    id=names(where)[[i]]
+    id = names(where)[[i]]
 
 
-    comp=retna(val[2], .comp)
-    op=retna(val[3], .op)
-    val=val[1]
+    comp = retna(val[2], .comp)
+    op = retna(val[3], .op)
+    val = val[1]
     # UNTRUSTED id
-    id=DBI::dbQuoteIdentifier(con, id)
+    id = DBI::dbQuoteIdentifier(con, id)
     # UNTRUSTED comp
 
     if(i == length(where)) comp = ""
-    else comp=switch(comp,
+    else comp = switch(comp,
        "and" = "and",
        "&&" = "and",
        "&" = "and",
@@ -42,7 +42,7 @@ procWhere = function(where, con, .comp="==", .op="and", .NAisNULL=TRUE){
     )
 
     # UNTRUSTED op
-    op=switch(op,
+    op = switch(op,
       "lt" = "<",
       "<" = "<",
 
@@ -67,15 +67,15 @@ procWhere = function(where, con, .comp="==", .op="and", .NAisNULL=TRUE){
       "="
     )
     # UNTRUSTED val
-    if(is.null(val))val=""
-    if(is.na(val))val=""
-    val=DBI::dbQuoteLiteral(con, val)
-    if(val=="''"&&.NAisNULL)val="NULL"
+    if(is.null(val))val = ""
+    if(is.na(val))val = ""
+    val = DBI::dbQuoteLiteral(con, val)
+    if(val=="''"&&.NAisNULL)val = "NULL"
 
-    l[[i]]=glue::glue('{id} {op} {val} {comp}')|>
+    l[[i]] = glue::glue('{id} {op} {val} {comp}')|>
       as.character()
   }
-  paste(l, collapse=" ")
+  paste(l, collapse = " ")
 }
 
 #' Process Data
@@ -89,15 +89,15 @@ procWhere = function(where, con, .comp="==", .op="and", .NAisNULL=TRUE){
 #'
 #' @return A partial SQL string of \code{id comp val op} like \code{ID == 1 and}
 #' @export
-procData = function(data, con, .NAisNULL=TRUE){
+procData = function(data, con, .NAisNULL = TRUE){
   purrr::imap(data, function(val, id){
-    if(is.null(val))val=""
-    if(is.na(val))val=""
-    val=DBI::dbQuoteLiteral(con, val)
-    if(val=="''"&&.NAisNULL)val="NULL"
+    if(is.null(val))val = ""
+    if(is.na(val))val = ""
+    val = DBI::dbQuoteLiteral(con, val)
+    if(val=="''"&&.NAisNULL)val = "NULL"
     glue::glue(DBI::dbQuoteIdentifier(con, id), " = ", val)
   })|>
-    paste(collapse=", ")
+    paste(collapse = ", ")
 }
 
 
@@ -108,19 +108,19 @@ procData = function(data, con, .NAisNULL=TRUE){
 #' @param table The table to operate on
 #'
 #' @export
-sendUpdate = function(where, data, table, con, .comp="==", .op="and"){
-  where = procWhere(where, con, .comp=.comp, .op=.op)
+sendUpdate = function(where, data, table, con, .comp = "==", .op = "and"){
+  where = procWhere(where, con, .comp = .comp, .op = .op)
   data = procData(data, con)
 
-  data=purrr::discard(data, function(x)is.null(x)||x=="")
+  data = purrr::discard(data, function(x)is.null(x)||x=="")
 
-  exe=glue::glue("UPDATE {table} SET {data} WHERE {where}")|>
+  exe = glue::glue("UPDATE {table} SET {data} WHERE {where}")|>
     as.character()
 
   tryCatch(
-    list(status= "resolve", effect=DBI::dbExecute(con, exe)),
+    list(status = "resolve", effect = DBI::dbExecute(con, exe)),
     error = function(e)
-      list(status= "reject", effect=list(error=e$message, call=e$call, sql=exe))
+      list(status = "reject", effect = list(error = e$message, call = e$call, sql = exe))
   )
 }
 
@@ -130,15 +130,15 @@ sendUpdate = function(where, data, table, con, .comp="==", .op="and"){
 #' @param table The table to operate on
 #'
 #' @export
-sendRemove = function(where, table, con, .comp="==", .op="&"){
-  where = procWhere(where, con, .comp=.comp, .op=.op)
+sendRemove = function(where, table, con, .comp = "==", .op = "&"){
+  where = procWhere(where, con, .comp = .comp, .op = .op)
 
-  exe=glue::glue("DELETE FROM {table} WHERE {where}")
+  exe = glue::glue("DELETE FROM {table} WHERE {where}")
 
   tryCatch(
-    list(status= "resolve", effect=DBI::dbExecute(con, exe)),
+    list(status = "resolve", effect = DBI::dbExecute(con, exe)),
     error = function(e)
-      list(status= "reject", effect=list(error=e$message, call=e$call, sql=exe))
+      list(status = "reject", effect = list(error = e$message, call = e$call, sql = exe))
   )
 }
 
@@ -148,16 +148,16 @@ sendRemove = function(where, table, con, .comp="==", .op="&"){
 #' @param table The table to operate on
 #'
 #' @export
-sendRead = function(where, table, con, .comp="==", .op="&"){
-  where = procWhere(where, con, .comp=.comp, .op=.op)
+sendRead = function(where, table, con, .comp = "==", .op = "&"){
+  where = procWhere(where, con, .comp = .comp, .op = .op)
 
-  exe=glue::glue("SELECT * FROM {table} WHERE {where}")|>
+  exe = glue::glue("SELECT * FROM {table} WHERE {where}")|>
     as.character()
 
   tryCatch(
-    list(status= "resolve", data=DBI::dbGetQuery(con, exe)|>as.list()),
+    list(status = "resolve", data = DBI::dbGetQuery(con, exe)|>as.list()),
     error = function(e)
-      list(status= "reject", effect=list(error=e$message, call=e$call, sql=exe))
+      list(status = "reject", effect = list(error = e$message, call = e$call, sql = exe))
   )
 }
 
@@ -168,26 +168,26 @@ sendRead = function(where, table, con, .comp="==", .op="&"){
 #' @param keys The primary keys of the table
 #'
 #' @export
-sendCreate = function(data, keys, table, con, .autoinc=TRUE){
-  data=purrr::discard(data, function(x)is.null(x)||x=="")
-  run=tryCatch(
+sendCreate = function(data, keys, table, con, .autoinc = TRUE){
+  data = purrr::discard(data, function(x)is.null(x)||x=="")
+  run = tryCatch(
     dplyr::as_tibble(data)|>
-      DBI::dbAppendTable(con, table, value=_)|>
-      list(status= "resolve", effect=_),
-    error=function(e)
-      list(status= "reject", effect=list(error=e$message, call=e$call, data=data))
+      DBI::dbAppendTable(con, table, value = _)|>
+      list(status = "resolve", effect = _),
+    error = function(e)
+      list(status = "reject", effect = list(error = e$message, call = e$call, data = data))
   )
 
   if(run$status=="resolve"&&.autoinc){
 
-    exe=glue::glue('SELECT * FROM {table} WHERE {str_split(keys, "[|,;:]")[[1]][1]} = LAST_INSERT_ID()')
+    exe = glue::glue('SELECT * FROM {table} WHERE {str_split(keys, "[|,;:]")[[1]][1]} = LAST_INSERT_ID()')
 
-    run$sql=exe
+    run$sql = exe
 
-    run$data=tryCatch(
+    run$data = tryCatch(
       DBI::dbGetQuery(con, exe)|>
         as.list(),
-      error=function(e)NULL
+      error = function(e)NULL
     )
   }
   run
@@ -220,10 +220,10 @@ observer = function(session, input, id, func){
 #' @param uitable The table to operate on
 #'
 #' @export
-tableObserver = function(session, input, id, uitable, .comp="==", .op="&"){
+tableObserver = function(session, input, id, uitable, .comp = "==", .op = "&"){
   observer(session, input, id, function(message){
     if(purrr::is_empty(message$where)&&purrr::is_empty(message$data))return(
-      list(status= "reject", effect=list(error="Nothing Sent"))
+      list(status = "reject", effect = list(error = "Nothing Sent"))
     )
 
     #  where:list(
@@ -237,22 +237,22 @@ tableObserver = function(session, input, id, uitable, .comp="==", .op="&"){
     switch (message$action,
       "create" = {
         return(
-          sendCreate(message$data, uitable@keys, uitable@name, uitable@con, .autoinc=uitable@autoinc)
+          sendCreate(message$data, uitable@keys, uitable@name, uitable@con, .autoinc = uitable@autoinc)
         )
       },
       "update" = {
         return(
-          sendUpdate(message$where, message$data, uitable@name, uitable@con, .comp=.comp, .op=.op)
+          sendUpdate(message$where, message$data, uitable@name, uitable@con, .comp = .comp, .op = .op)
         )
       },
       "remove" = {
         return(
-          sendRemove(message$where, uitable@name, uitable@con, .comp=.comp, .op=.op)
+          sendRemove(message$where, uitable@name, uitable@con, .comp = .comp, .op = .op)
         )
       },
       "read" = {
         return(
-          sendRead(message$where, uitable@name, uitable@con, .comp=.comp, .op=.op)
+          sendRead(message$where, uitable@name, uitable@con, .comp = .comp, .op = .op)
         )
       }
     )

@@ -55,7 +55,7 @@ methods::setClass(
     conname = "character",
     id = "character",
     name = "character",
-    types="list",
+    types = "list",
     opt = "list",
     input = "list",
     js = "character",
@@ -69,7 +69,7 @@ methods::setClass(
     conname = NA_character_,
     id = NA_character_,
     name = NA_character_,
-    types=list(),
+    types = list(),
     opt = list(),
     input = list(),
     js = NA_character_,
@@ -88,7 +88,7 @@ methods::setClass(
 #'
 #' @param .data The table to pull from
 #' @param var The column to pull
-pullclass=Vectorize(
+pullclass = Vectorize(
   function(.data, var)paste(class(dplyr::pull(.data, var)), collapse = " "),
   vectorize.args = "var",
   SIMPLIFY = F
@@ -118,11 +118,11 @@ UITable = function(
   ){
 
   if(is.null(id))
-    id=deparse(substitute(con))
+    id = deparse(substitute(con))
 
   if(is.null(name) || is.na(name))
     stop("name is null or NA")
-  if(methods::is(con)!="Pool")
+  if(methods::is(con)!= "Pool")
     warning("con is not a Pool, use `pool::dbPool()` not `DBI::dbConnect()` for stability")
 
   cfg = getConfig()
@@ -130,7 +130,7 @@ UITable = function(
     cfg$opt,
     opt
   )
-  tib=tbl(con, name)
+  tib = tbl(con, name)
 
   types = utils::modifyList(
     pullclass(tib, colnames(tib)),
@@ -142,23 +142,23 @@ UITable = function(
     input
   )
 
-  this=methods::new("UITable",
-    con=con,
+  this = methods::new("UITable",
+    con = con,
     conname = deparse(substitute(con)),
-    name=name,
-    id=id,
-    types=types,
-    opt=opt,
-    input=input,
-    js=`if`(is.null(js),glue::glue("UITable.{id}"),js),
-    tbl=tbl,
-    keys=keys,
+    name = name,
+    id = id,
+    types = types,
+    opt = opt,
+    input = input,
+    js = `if`(is.null(js),glue::glue("UITable.{id}"),js),
+    tbl = tbl,
+    keys = keys,
     autoinc = autoinc,
     css = css
   )
 
   for(i in 1:2){
-    this@opt=recursivefor(
+    this@opt = recursivefor(
       this@opt,
       function(x, i){
         if(typeof(x)!="character")return(x)
@@ -195,52 +195,52 @@ UITable = function(
 #'  </tbody>
 #' </table>
 
-toTable=function(this){
+toTable = function(this){
 
-  tib=this@tbl(this@con, this@name)|>
+  tib = this@tbl(this@con, this@name)|>
     dplyr::as_tibble()
   shinyjs::logjs(glue::glue("{this@conname}.{this@name}"))
   shinyjs::logjs(tib)
-  col_index=function(col){
+  col_index = function(col){
     purrr::detect_index(colnames(tib), ~.==col)
   }
 
   # Find the reference type
-  # ItemID=list(table="items", key="ID", val="Item", con=Pool, tbl=function(c,n)tbl(c,n)|>select(1:2))
-  input=purrr::map(
+  # ItemID = list(table = "items", key = "ID", val = "Item", con = Pool, tbl = function(c,n)tbl(c,n)|>select(1:2))
+  input = purrr::map(
     this@input,
     function(input){
       if(!is.list(input))return(c(input))
       if(!(
         is.null(input$con)||"Pool" %in% class(input$con)
       ))stop("Connection is not a Pool")
-      con=retnn(input$con,this@con)
+      con = retnn(input$con,this@con)
       test = this@opt$use_this_tbl
-      if(test==TRUE)test="on"
-      else if(test==FALSE)test="off"
-      test=tolower(test)
-      tb=switch(test,
+      if(test==TRUE)test = "on"
+      else if(test==FALSE)test = "off"
+      test = tolower(test)
+      tb = switch(test,
         "force" = this@tbl,
         "on" = `if`(con == this@con, retnn(input@tbl, this@tbl, retnn(input$tbl, dplyr::tbl))),
         "off" = retnn(input$tbl, dplyr::tbl)
       )(con, input$table)|>
         dplyr::select(retnn(input$key, 1), retnn(input$val, 2))|>
         dplyr::as_tibble()|>
-        dplyr::rename(key=1, val=2)
+        dplyr::rename(key = 1, val = 2)
 
-      sel=tb|>
+      sel = tb|>
         dplyr::mutate(
-          x=glue::glue('<option value="{key}">{val}</option>') # TODO: Fix if <>'" are in data
+          x = glue::glue('<option value="{key}">{val}</option>') # TODO: Fix if <>'" are in data
         )|>
-        dplyr::summarise(paste0(x, collapse=""))|>
+        dplyr::summarise(paste0(x, collapse = ""))|>
         dplyr::pull()
         # Need to generate a function to select the correct item from the key
 
-      li=tb|>
+      li = tb|>
         dplyr::mutate(
-          x=glue::glue("'{key}':'{val}'") # TODO: Fix if <>'" are in data
+          x = glue::glue("'{key}':'{val}'") # TODO: Fix if <>'" are in data
         )|>
-        dplyr::summarise(paste0(x, collapse=","))|>
+        dplyr::summarise(paste0(x, collapse = ","))|>
         dplyr::pull()
 
       c(glue::glue('<select>{sel}</select>'), li)
@@ -253,8 +253,8 @@ toTable=function(this){
       dplyr::everything(),
       function(x){
         if(is.null(x))return()
-        col=dplyr::cur_column()
-        glue::glue(this@opt$td$glue, .na="")
+        col = dplyr::cur_column()
+        glue::glue(this@opt$td$glue, .na = "")
       }
     ))|>
     tidyr::unite(
@@ -272,7 +272,7 @@ toTable=function(this){
 
   # Header
   head = dplyr::tibble(
-    x=colnames(tib)
+    x = colnames(tib)
   )|>
   	dplyr::mutate(
       x = glue::glue(
@@ -285,14 +285,14 @@ toTable=function(this){
   	dplyr::pull()
 
   template = dplyr::tibble(
-      col=colnames(tib)
+      col = colnames(tib)
     )|>
   	dplyr::mutate(
-      col=glue::glue(this@opt$td$templateglue)
+      col = glue::glue(this@opt$td$templateglue)
     )|>
   	dplyr::summarise(paste(col, collapse = this@opt$td$collapse))|>
   	dplyr::pull()
-  template=glue::glue(this@opt$tr$templateglue)
+  template = glue::glue(this@opt$tr$templateglue)
 
 
   # Glue together
@@ -319,7 +319,7 @@ toTable=function(this){
 #' @param value The Shiny event value for tabset
 #' @param icon An icon to use
 #' @param ... UI elements to include within the tab
-tabTable = function(title, id, ..., value=title, icon = NULL){
+tabTable = function(title, id, ..., value = title, icon = NULL){
   shiny::tabPanel(title, shiny::fluidRow(shiny::tableOutput(id)), ..., value , icon)
 }
 
@@ -344,25 +344,25 @@ tabTable = function(title, id, ..., value=title, icon = NULL){
 #' @examples
 #'
 #' mainTables(
-#'   list(CookLog=cook, CookItems=cookitems)
-#' , id="tabset"
+#'   list(CookLog = cook, CookItems = cookitems)
+#' , id = "tabset"
 #' )
 #'
 #' mainTables(list(
-#'   list(title="CookLog", id="CookLog"),
-#'   list(title="CookItems", id="CookItems")
-#' ), id="tabset", .adv=T)
+#'   list(title = "CookLog", id = "CookLog"),
+#'   list(title = "CookItems", id = "CookItems")
+#' ), id = "tabset", .adv = T)
 #'
-mainTables = function(..., id, .adv=F, .tabs=NULL){
+mainTables = function(..., id, .adv = FALSE, .tabs = NULL){
 
-  tabTables = function(tabs, id, .adv=F){
-    if(!.adv)tabs=purrr::imap(tabs, function(tab, i){list(title=i, id=tab@id)})|>
+  tabTables = function(tabs, id, .adv = FALSE){
+    if(!.adv)tabs = purrr::imap(tabs, function(tab, i){list(title = i, id = tab@id)})|>
         unname()
-    tabs=tabs|>
+    tabs = tabs|>
       purrr::map(function(x){
-      	shiny::tabPanel(x$title, shiny::fluidRow(shiny::tableOutput(x$id)), value=retnn(x$value, x$title), icon=x$icon)
+      	shiny::tabPanel(x$title, shiny::fluidRow(shiny::tableOutput(x$id)), value = retnn(x$value, x$title), icon = x$icon)
       })
-    tabs$id=id
+    tabs$id = id
     tabs
   }
   if(is.null(.tabs))tabs = list(...)
@@ -370,7 +370,7 @@ mainTables = function(..., id, .adv=F, .tabs=NULL){
   shiny::mainPanel(
     do.call(
       shiny::tabsetPanel,
-      tabTables(tabs, id=id, .adv=.adv)
+      tabTables(tabs, id = id, .adv = .adv)
     )
   )
 }
@@ -384,9 +384,9 @@ mainTables = function(..., id, .adv=F, .tabs=NULL){
 #' @inheritParams shinyTab
 #' @param set A list of \code{\link{tabPanels}} values and \code{\link{UITable}} objects as key value pairs
 
-tabJs = function(input, tab, set, .onClickOff="commit"){
+tabJs = function(input, tab, set, .onClickOff = "commit"){
   # Get the current open tabPanels
-  obj=set[[as.character(input[[tab]])]]
+  obj = set[[as.character(input[[tab]])]]
   if(is.null(obj))return()
   shinyjs::html(obj@id, toTable(obj)) # TODO
   shinyjs::runjs(glue::glue('main($("#{obj@id}"), "{obj@id}", "{str_to_lower(.onClickOff)}")'))
@@ -401,7 +401,7 @@ tabJs = function(input, tab, set, .onClickOff="commit"){
 #'
 #' @inheritParams shinyTab
 #' @param ...,.tabs A list of tab values as keys and \code{\link{UITable}} objects as values
-observeTab = function(session, input, tab, ..., .onClickOff="commit", .tabs=NULL){
+observeTab = function(session, input, tab, ..., .onClickOff = "commit", .tabs = NULL){
   if(is.null(.tabs))set = list(...)
   else set = .tabs
 
