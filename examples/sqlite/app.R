@@ -29,7 +29,7 @@ ui = bootstrapPage(
 
 # Define server logic to render the tables and allow interactivity
 server = function(input, output, session) {
-	observeSwitch(session, input, container)
+	observeSwitch(session, input, container) # , .onClickOff = "discard"
 
 	onSessionEnded(function(){
 		message("Closing pools")

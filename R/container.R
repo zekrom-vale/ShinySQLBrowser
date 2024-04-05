@@ -130,10 +130,10 @@ UIContainer = function(data, opt=NULL){
 #'   theme = bslib::bs_theme(version = 4), # Optional don't use 5 https://github.com/zekrom-vale/ShinySQLBrowser/issues/2
 #'   includeUITable(container)
 #' )
-observeSwitch = function(session, input, container){
+observeSwitch = function(session, input, container, .onClickOff="commit"){
   observeTab(
     session, input, "tabset",
-    .commitout=FALSE,
+    .onClickOff=.onClickOff,
     .tabs=container@tables
   )
 }

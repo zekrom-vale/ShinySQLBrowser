@@ -384,12 +384,12 @@ mainTables = function(..., id, .adv=F, .tabs=NULL){
 #' @inheritParams shinyTab
 #' @param set A list of \code{\link{tabPanels}} values and \code{\link{UITable}} objects as key value pairs
 
-tabJs = function(input, tab, set, .commitout=TRUE){
+tabJs = function(input, tab, set, .onClickOff="commit"){
   # Get the current open tabPanels
   obj=set[[as.character(input[[tab]])]]
   if(is.null(obj))return()
   shinyjs::html(obj@id, toTable(obj)) # TODO
-  shinyjs::runjs(glue::glue('main($("#{obj@id}"), "{obj@id}", {str_to_lower(.commitout)})'))
+  shinyjs::runjs(glue::glue('main($("#{obj@id}"), "{obj@id}", "{str_to_lower(.onClickOff)}")'))
 }
 #' Run the scripts of the when it is visable
 #' Server side, Client side, and Set HTML table
@@ -401,7 +401,7 @@ tabJs = function(input, tab, set, .commitout=TRUE){
 #'
 #' @inheritParams shinyTab
 #' @param ...,.tabs A list of tab values as keys and \code{\link{UITable}} objects as values
-observeTab = function(session, input, tab, ..., .commitout=TRUE, .tabs=NULL){
+observeTab = function(session, input, tab, ..., .onClickOff="commit", .tabs=NULL){
   if(is.null(.tabs))set = list(...)
   else set = .tabs
 
@@ -413,7 +413,7 @@ observeTab = function(session, input, tab, ..., .commitout=TRUE, .tabs=NULL){
   # Start the tab listener
   shiny::observeEvent(
     input[[tab]], {
-      tabJs(input, tab, set, .commitout)
+      tabJs(input, tab, set, .onClickOff)
     }
   )
 }

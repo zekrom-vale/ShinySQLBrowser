@@ -143,7 +143,7 @@ function clearError(tr){
 	}
 }
 
-async function commit(tbl, tr, port=undefined, commitout=true){
+async function commit(tbl, tr, port=undefined, onClickOff="commit"){
 	//build(tr)
 	if(port !== undefined){
 		let data=build(tr);
@@ -164,7 +164,7 @@ async function commit(tbl, tr, port=undefined, commitout=true){
 			});
 			update(tbl, tr, message.data);
 			tr.removeClass("new-tr");
-			addRow(tbl, port, commitout);
+			addRow(tbl, port, onClickOff);
 		}
 		else{
 			message=await port.update(where, data);
@@ -188,14 +188,14 @@ async function commit(tbl, tr, port=undefined, commitout=true){
 // @param tbl The table to modify as a jQuery element
 // @param tr The row to make interactive
 // @param evnt The html event object
-function create(tbl, tr, evnt, port=undefined, commitout=true){
+function create(tbl, tr, evnt, port=undefined, onClickOff="commit"){
 	let target=$(evnt.target);
 	if(!target.is("td"))target=target.parent();
 	tr=$(tr);
 	//Only if it isnt active
 	if(!tr.hasClass("active")){
 		tbl.find("tbody tr.active").each(function(){
-			commit(tbl, $(this), port, commitout);
+			commit(tbl, $(this), port, onClickOff);
 		});
 		tr.addClass("active");
 		//Find each cell in the row
@@ -222,6 +222,7 @@ function create(tbl, tr, evnt, port=undefined, commitout=true){
 }
 
 async function discard(tbl, tr, port){
+	debugger
 	if(!tr.hasClass("new-tr")){
 		let data=build(tr, true);
 		let where = buildWhere(data, tbl);
@@ -251,20 +252,20 @@ async function discard(tbl, tr, port){
 }
 
 
-function main(tbl, id, commitout=true){
+function main(tbl, id, onClickOff="commit"){
 	//Add new port
 	var port=new crudport(id);
 	console.log(`Added port ${id}: `, port);
 	tbl.find("td:not(.ecl)").each(function(){render(tbl, $(this))});
 	
-	mainrow(tbl, port, tbl.find("tr"), commitout);
-	addRow(tbl, port, commitout);
+	mainrow(tbl, port, tbl.find("tr"), onClickOff);
+	addRow(tbl, port, onClickOff);
 }
 
-function mainrow(tbl, port, tr, commitout=true){
+function mainrow(tbl, port, tr, onClickOff="commit"){
 	//On click add an input box
 	tr.on("click", function(e){
-		if(!($(e.target).is(".btn") || $(e.target).parents(".btn").is(".btn")))create(tbl, this, e, port, commitout)
+		if(!($(e.target).is(".btn") || $(e.target).parents(".btn").is(".btn")))create(tbl, this, e, port, onClickOff)
 	});
 	
 	//Deal with the click and hold
@@ -273,7 +274,7 @@ function mainrow(tbl, port, tr, commitout=true){
 	});
 	
 	tr.find("button.commit").on("click", function(evnt){
-		commit(tbl, $(this).parents("tr"), port, commitout);
+		commit(tbl, $(this).parents("tr"), port, onClickOff);
 	});
 	tr.find("button.discard").on("click", async function(evnt){
 		discard(tbl, $(this).parents("tr"), port);
@@ -313,11 +314,18 @@ function mainrow(tbl, port, tr, commitout=true){
 		})
 	});
 	//On click off destroy the inputs
-	if(commitout)tr.on("focusout", function(evnt){
+	if(onClickOff=="commit")tr.on("focusout", function(evnt){
 		let tr=$(this);
 		setTimeout(()=>{
 			//Only if its active and not busy
-			if(tr.hasClass("active") && !isbusy(tr))commit(tbl, tr, port, commitout);
+			if(tr.hasClass("active") && !isbusy(tr))commit(tbl, tr, port, onClickOff);
+		}, 50);
+	});
+	else if(onClickOff=="discard")tr.on("focusout", function(evnt){
+		let tr=$(this);
+		setTimeout(()=>{
+			//Only if its active and not busy
+			if(tr.hasClass("active") && !isbusy(tr))discard(tbl, tr, port);
 		}, 50);
 	});
 	
@@ -345,15 +353,15 @@ function mainrow(tbl, port, tr, commitout=true){
 				discard(tbl, $(this), port);
 				break;
 			case "Enter":
-				commit(tbl, $(this), port, commitout);
+				commit(tbl, $(this), port, onClickOff);
 				break;
 		}
 	});
 }
 
-function addRow(tbl, port, commitout=true){
+function addRow(tbl, port, onClickOff="commit"){
 	let input=tbl.find("table>template").contents().clone();
 	tbl.find("tbody").append(input);
 	
-	mainrow(tbl, port, $(input), commitout);
+	mainrow(tbl, port, $(input), onClickOff);
 }
