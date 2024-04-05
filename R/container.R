@@ -69,7 +69,8 @@ CSSKEYS = c("width", "height")
 #' data = yaml::read_yaml("config.yaml")$tables
 #' container = UIContainer(data)
 #'
-UIContainer = function(data, opt = NULL){
+UIContainer = function(data, opt = NULL, .resetCfg = TRUE){
+  if(.resetCfg) resetConnfig()
   if(!is.null(opt))setConfig(opt)
   env = parent.frame()
   tables = purrr::map(data, function(table){
@@ -261,7 +262,7 @@ setConfigByName = function(name, value){
 }
 
 
-genFormat = function(tables, opt = getConfig()){
+genFormat = function(tables, opt = getConfig()$opt){
 	type = purrr::imap(opt$format_default, function(func, name){
 		glue::glue('"{name}": {func}')
 	})|>

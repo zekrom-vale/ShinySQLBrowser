@@ -138,7 +138,7 @@ UITable = function(
   )
 
   input = utils::modifyList(
-    as.list(vd(getConfig()$typemap, types)),
+    as.list(vd(getConfig()$opt$typemap, types)),
     input
   )
 
@@ -389,7 +389,7 @@ tabJs = function(input, tab, set, .onClickOff = "commit"){
   obj = set[[as.character(input[[tab]])]]
   if(is.null(obj))return()
   shinyjs::html(obj@id, toTable(obj)) # TODO
-  shinyjs::runjs(glue::glue('main($("#{obj@id}"), "{obj@id}", "{str_to_lower(.onClickOff)}")'))
+  shinyjs::runjs(glue::glue('main($("#{obj@id}"), "{obj@id}", "{stringr::str_to_lower(.onClickOff)}")'))
 }
 #' Run the scripts of the when it is visable
 #' Server side, Client side, and Set HTML table
@@ -405,7 +405,7 @@ observeTab = function(session, input, tab, ..., .onClickOff = "commit", .tabs = 
   if(is.null(.tabs))set = list(...)
   else set = .tabs
 
-  # Start message handeler
+  # Start message handler
   purrr::map(set, function(obj){
     tableObserver(session, input, obj@id, obj)
   })

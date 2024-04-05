@@ -46,7 +46,7 @@ cookFilter = function(con, name){
     as_tibble()
 }
 data = yaml::read_yaml("config.yaml")
-container = UIContainer(data$tables, data$opt)
+container = UIContainer(data$tables, data)
 
 
 # Define UI for application that creates a user interface for SQL tables
