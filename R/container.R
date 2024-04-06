@@ -64,12 +64,8 @@ methods::setClass(
 #'   [...]
 #' ```
 #'
-#' @examples
-#' \dontrun{
-#' data = yaml::read_yaml("config.yaml")$tables
-#' container = UIContainer(data)
-#' }
-#'
+#' @example examples/sqlite/app.R
+#' @example examples/logs/app.R
 UIContainer = function(data, opt = NULL, .resetCfg = TRUE, env = parent.frame()){
   if(.resetCfg) resetConnfig()
   if(!is.null(opt))setConfig(opt)
@@ -137,13 +133,8 @@ UIContainer = function(data, opt = NULL, .resetCfg = TRUE, env = parent.frame())
 #' @return  an observer reference class object
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' ui = bootstrapPage(
-#'   theme = bslib::bs_theme(version = 4), # Optional don't use 5 https://github.com/zekrom-vale/ShinySQLBrowser/issues/2
-#'   includeUITable(container)
-#' )
-#' }
+#' @example examples/sqlite/app.R
+#' @example examples/logs/app.R
 observeSwitch = function(session, input, container, .onClickOff = "commit"){
   observeTab(
     session, input, "tabset",
@@ -166,6 +157,8 @@ observeSwitch = function(session, input, container, .onClickOff = "commit"){
 #' @return A list of UI HTML elements required for ShinySQLBrowser
 #' @export
 #'
+#' @example examples/sqlite/app.R
+#' @example examples/logs/app.R
 includeUITable = function(
     container,
     jqueryCSS = "https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css",

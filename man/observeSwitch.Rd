@@ -4,7 +4,7 @@
 \alias{observeSwitch}
 \title{Observe Switch of Tabs}
 \usage{
-observeSwitch(session, input, container)
+observeSwitch(session, input, container, .onClickOff = "commit")
 }
 \arguments{
 \item{session}{The Shiny session}
@@ -21,10 +21,120 @@ Observes the switching of tabs to trigger loading of the tables
 Put this in the \code{\link{shinyApp}} \code{server} code
 }
 \examples{
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    https://shiny.posit.co/
+#
+
+library(DBI)
+library(pool)
+library(tidyverse)
+library(ShinySQLBrowser)
+
+mydb = dbPool(drv = RSQLite::SQLite(), dbname =":memory:")
+mtcars|>
+	as_tibble()|>
+	mutate(car = rownames(mtcars), id = row_number(car))|>
+	dbWriteTable(mydb, "mtcars", value = _)
+
+data = yaml::read_yaml("config.yaml")
+container = UIContainer(data$tables, data)
+
+# Define UI for application that creates a user interface for SQL tables
 ui = bootstrapPage(
-  theme = bslib::bs_theme(version = 4), # Optional don't use 5 https://github.com/zekrom-vale/ShinySQLBrowser/issues/2
-  includeUITable(container)
+	theme = bslib::bs_theme(version = 4),
+	includeUITable(container)
 )
+
+
+# Define server logic to render the tables and allow interactivity
+server = function(input, output, session) {
+	observeSwitch(session, input, container) # , .onClickOff = "discard"
+
+	onSessionEnded(function(){
+		message("Closing pools")
+		poolClose(mydb)
+	})
+}
+
+# Run the this integrated applicatopn
+shinyApp(ui = ui, server = server)
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    https://shiny.posit.co/
+#
+# Note: The data used is not currently published
+
+library(DBI)
+library(odbc)
+library(tidyverse)
+library(dbplyr)
+library(pool)
+library(shiny)
+library(shinyjs)
+library(ShinySQLBrowser)
+
+user = 'root'
+password = "RayLVM"
+
+CookLog <- dbPool(
+  drv = RMariaDB::MariaDB(),
+  password = password,
+  user = user,
+  dbname = 'CookLog'
+)
+
+SaladLog <- dbPool(
+  drv = RMariaDB::MariaDB(),
+  password = password,
+  user = user,
+  dbname = 'SaladLog'
+)
+
+Work <- dbPool(
+  drv = RMariaDB::MariaDB(),
+  password = password,
+  user = user,
+  dbname = 'Work'
+)
+
+cookFilter = function(con, name){
+  dplyr::tbl(con, name)|>
+    #filter(Date==lubridate::today()-3)|>
+    as_tibble()
+}
+data = yaml::read_yaml("config.yaml")
+container = UIContainer(data$tables, data)
+
+
+# Define UI for application that creates a user interface for SQL tables
+ui = bootstrapPage(
+    theme = bslib::bs_theme(version = 4),
+    includeUITable(container)
+)
+
+
+# Define server logic to render the tables and allow interactivity
+server = function(input, output, session) {
+  observeSwitch(session, input, container)
+
+  onSessionEnded(function(){
+    message("Closing pools")
+    poolClose(Work)
+    poolClose(CookLog)
+    poolClose(SaladLog)
+    if(commandArgs()[1]!="RStudio")quit(save = "no")
+  })
+}
+
+# Run the this integrated applicatopn
+shinyApp(ui = ui, server = server)
 }
 \seealso{
 \code{\link{UIContainer}}

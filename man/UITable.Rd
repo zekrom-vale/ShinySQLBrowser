@@ -9,12 +9,13 @@ UITable(
   name,
   id = NULL,
   types = list(),
-  typemap = list(),
   opt = list(),
   input = list(),
   js = NULL,
   tbl = dplyr::tbl,
-  keys = ""
+  keys = "",
+  autoinc = TRUE,
+  css = ""
 )
 }
 \arguments{
@@ -23,8 +24,6 @@ UITable(
 \item{name}{The tale name to connect to}
 
 \item{types}{A list of the types of the columns, must name the columns}
-
-\item{typemap}{A list of the HTML input tags to generate per type}
 
 \item{opt}{A list of styles}
 

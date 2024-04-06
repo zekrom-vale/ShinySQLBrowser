@@ -343,19 +343,18 @@ tabTable = function(title, id, ..., value = title, icon = NULL){
 #' * value:  Optional The value that should be sent when tabsetPanel reports that this tab is selected.
 #' * icon:   Optional icon to appear on the tab.  This attribute is only valid when using a tabPanel within a navbarPage().
 #'
-#' @examples
-#' \dontrun{
+#' ```r
+#' library(ShinySQLBrowser)
 #' mainTables(
 #'   list(CookLog = cook, CookItems = cookitems)
 #' , id = "tabset"
 #' )
-#' }
-#' \dontrun{
+#'
 #' mainTables(list(
 #'   list(title = "CookLog", id = "CookLog"),
 #'   list(title = "CookItems", id = "CookItems")
 #' ), id = "tabset", .adv = T)
-#' }
+#' ```
 mainTables = function(..., id, .adv = FALSE, .tabs = NULL){
 
   tabTables = function(tabs, id, .adv = FALSE){

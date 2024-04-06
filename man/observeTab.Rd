@@ -5,7 +5,7 @@
 \title{Run the scripts of the when it is visable
 Server side, Client side, and Set HTML table}
 \usage{
-observeTab(session, input, tab, ..., .commitout = TRUE, .tabs = NULL)
+observeTab(session, input, tab, ..., .onClickOff = "commit", .tabs = NULL)
 }
 \arguments{
 \item{session}{The Shiny session}

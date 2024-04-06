@@ -22,15 +22,14 @@ UITable
 
 \item{\code{opt}}{A list of styles
 
-\code{
-   td    = list(class="", collapse=" "),
+\if{html}{\out{<div class="sourceCode R">}}\preformatted{   td    = list(class="", collapse=" "),
    tr    = list(class="", collapse=" "),
    th    = list(class="", collapse=" "),
    table = list(class="table"),
    tbody = list(class="table-striped"),
    thead = list(class=""),
    use_this_tbl = c("force", "off", "on")
-}}
+}\if{html}{\out{</div>}}}
 
 \item{\code{typemap}}{A list of the HTML input tags to generate per type
 If a list is passed instead of character it is used as a reference

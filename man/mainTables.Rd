@@ -4,7 +4,7 @@
 \alias{mainTables}
 \title{Creates a list of \code{\link{tabPanels}}}
 \usage{
-mainTables(..., id, .adv = F, .tabs = NULL)
+mainTables(..., id, .adv = FALSE, .tabs = NULL)
 }
 \arguments{
 \item{..., .tabs}{The list of tabs to add}
@@ -27,21 +27,20 @@ A list of title, id, and arguments to pass to tabPanel
 \item id:     The id to use for the tableOutput
 \item value:  Optional The value that should be sent when tabsetPanel reports that this tab is selected.
 \item icon:   Optional icon to appear on the tab.  This attribute is only valid when using a tabPanel within a navbarPage().
-}}
 }
-\description{
-Creates a list of \code{\link{tabPanels}}
-}
-\examples{
 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(ShinySQLBrowser)
 mainTables(
-  list(CookLog=cook, CookItems=cookitems)
-, id="tabset"
+  list(CookLog = cook, CookItems = cookitems)
+, id = "tabset"
 )
 
 mainTables(list(
-  list(title="CookLog", id="CookLog"),
-  list(title="CookItems", id="CookItems")
-), id="tabset", .adv=T)
-
+  list(title = "CookLog", id = "CookLog"),
+  list(title = "CookItems", id = "CookItems")
+), id = "tabset", .adv = T)
+}\if{html}{\out{</div>}}}
+}
+\description{
+Creates a list of \code{\link{tabPanels}}
 }

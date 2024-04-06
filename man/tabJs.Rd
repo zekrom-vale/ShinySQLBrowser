@@ -4,7 +4,7 @@
 \alias{tabJs}
 \title{Run the JS start the HTML}
 \usage{
-tabJs(input, tab, set, .commitout = TRUE)
+tabJs(input, tab, set, .onClickOff = "commit")
 }
 \arguments{
 \item{input}{The shiny input}
