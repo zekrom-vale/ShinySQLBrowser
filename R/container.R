@@ -65,8 +65,10 @@ methods::setClass(
 #' ```
 #'
 #' @examples
+#' \dontrun{
 #' data = yaml::read_yaml("config.yaml")$tables
 #' container = UIContainer(data)
+#' }
 #'
 UIContainer = function(data, opt = NULL, .resetCfg = TRUE, env = parent.frame()){
   if(.resetCfg) resetConnfig()
@@ -136,10 +138,12 @@ UIContainer = function(data, opt = NULL, .resetCfg = TRUE, env = parent.frame())
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' ui = bootstrapPage(
 #'   theme = bslib::bs_theme(version = 4), # Optional don't use 5 https://github.com/zekrom-vale/ShinySQLBrowser/issues/2
 #'   includeUITable(container)
 #' )
+#' }
 observeSwitch = function(session, input, container, .onClickOff = "commit"){
   observeTab(
     session, input, "tabset",
