@@ -388,6 +388,9 @@ mainTables = function(..., id, .adv = FALSE, .tabs = NULL){
 
 tabJs = function(input, tab, set, .onClickOff = "commit"){
   # Get the current open tabPanels
+  if(getConfig()$opt$message){
+  	message(as.character(input[[tab]]))
+  }
   obj = set[[as.character(input[[tab]])]]
   if(is.null(obj))return()
   shinyjs::html(obj@id, toTable(obj)) # TODO
