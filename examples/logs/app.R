@@ -13,6 +13,7 @@
 library(DBI)
 library(odbc)
 library(tidyverse)
+library(dplyr)
 library(dbplyr)
 library(pool)
 library(shiny)
@@ -24,7 +25,7 @@ password = "RayLVM"
 
 
 # If table don't exist
-if(TRUE){
+if(FALSE){
 	# Create a detached connection
 	detached <- dbPool(
 		drv = RMariaDB::MariaDB(),
@@ -59,11 +60,21 @@ Work <- dbPool(
   dbname = 'Work'
 )
 
+# Note nothing will show here
 cookFilter = function(con, name){
+  today = lubridate::today(Sys.timezone())
   dplyr::tbl(con, name)|>
-    #filter(Date==lubridate::today()-3)|>
+    filter(Date==today)|>
     as_tibble()
 }
+
+expiredFilter = function(con, name){
+	today = lubridate::today(Sys.timezone())
+	dplyr::tbl(con, name)|>
+		filter(Expires<=today, Ack==0)|>
+		as_tibble()
+}
+
 data = yaml::read_yaml("config.yaml")
 container = UIContainer(data$tables, data)
 

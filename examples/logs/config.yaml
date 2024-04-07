@@ -4,6 +4,7 @@ opt:
     format_default:
         Date: x=>new Date(`${x}T18:00:00`).toLocaleDateString()
         hms difftime: x=>new Date(`0000-01-01T${x}`).toLocaleTimeString()
+    message: on
 
 tables:
     CookLog:
@@ -123,7 +124,7 @@ tables:
         id: SaladLog
         types: null
         opt: null
-        rows: 
+        rows:
             ID:
                 width: 80px
                 input: <input type="number" disabled>
@@ -156,6 +157,50 @@ tables:
                 width: 300px
         js: null
         tbl: null # Passed through get() local function
+        keys: ID
+        
+    ExpiredLog:
+        tab:
+            title: ExpiredLog # The title and identifier for the tabPanel
+            # id will be fetched from outer
+            value: null
+            icon: null
+        con: SaladLog # Passed through get()
+        name: salad
+        id: ExpiredLog
+        rows:
+            ID:
+                width: 80px
+                input: <input type="number" disabled>
+            Date:
+                width: 120px
+            Time:
+                width: 120px
+            SaladID:
+                width: 240px
+                input:
+                    table: items
+                    key: ID
+                    val: Salad
+                format: x=>($("#ExpiredLog-SaladID").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
+            MeatAge:
+                width: 100px
+            Expires:
+                width: 120px
+            Ack:
+                width: 80px
+            Person:
+                width: 140px
+                input:
+                    con: Work
+                    table: people
+                    key: ID
+                    val: Name
+                format: x=>($("#ExpiredLog-Person").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
+            Comment:
+                width: 300px
+        js: null
+        tbl: expiredFilter # Passed through get() local function
         keys: ID
         
     SaladItems:
