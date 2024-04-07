@@ -41,8 +41,16 @@ function escapeHTML(unsafe) {
 }
 
 function write(tbl, el, val){
-		el.data("val", val);
+		rawWrite(el, val);
 		render(tbl, el, val);
+}
+
+function rawWrite(el, val){
+	el.data("val", val);
+}
+
+function read(el){
+	return el.data("val");
 }
 
 function applyTypeFun(typefun, col, type, val){
@@ -56,8 +64,8 @@ function applyTypeFun(typefun, col, type, val){
 function render(tbl, el, val=undefined){
 	if(val===null)el.append("<div></div>");
 	else{
-		if(val===undefined)val=el.data("val");
-		else el.data("val", val);
+		if(val===undefined)val=read(el);
+		else rawWrite(el, val);
 		let head=$(`#${el.data("col")}`);
 		let col=head.data("col");
 		let type=head.data("type");
@@ -80,9 +88,6 @@ function isbusy(el){
 		return el.data("busy")>0;
 		//return el.hasClass("busy")
 }
-function read(el){
-		return el.data("val");
-}
 
 function update(tbl, tr, data="data-val"){
 	if(data==="null"){
@@ -103,7 +108,7 @@ function update(tbl, tr, data="data-val"){
 	else if(data==="data-val"){
 		tr.find("td:not(.ecl)").each(function(){
 			let td=$(this);
-			let val=td.data("val");
+			let val=read(td);
 			td.empty();
 			write(tbl, td, val);
 		});

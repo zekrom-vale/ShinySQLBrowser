@@ -145,6 +145,7 @@ tables:
                 width: 120px
             Ack:
                 width: 80px
+            #    input: <input type="checkbox">
             Person:
                 width: 140px
                 input:
@@ -189,6 +190,7 @@ tables:
                 width: 120px
             Ack:
                 width: 80px
+            #    input: <input type="checkbox">
             Person:
                 width: 140px
                 input:
