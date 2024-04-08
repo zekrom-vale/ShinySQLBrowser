@@ -1,10 +1,12 @@
+library(tidyverse)
+library(DBI)
+library(pool)
 
 # people - Work
 people=read_csv("data/CookLog.people.csv")%>%
-  filter(Person!="Shawn")%>%
   arrange(Person)%>%
   mutate(
-    ID=row_number()+1,
+    ID=row_number(),
     Name=Person,
     Person=NULL,
     Active = 1,
@@ -18,14 +20,13 @@ Work <- dbPool(
   dbname ='Work'
 )
 
-dbAppendTable(Work, "people", work)
+dbAppendTable(Work, "people", people)
 
 
 
 # items - CookLog
 
 clitems = read_csv("data/CookLog.items.csv")%>%
-  filter(Item!="8 Pice Fried Chicken")%>%
   mutate(
     Method = case_match(Method,
       "Baked" ~ 1,
@@ -71,7 +72,8 @@ cook=read_csv("data/CookLog.cook.csv")%>%
     User=NULL,
     Item=NULL,
     Date=lubridate::mdy(Date)
-  )
+  )%>%
+    filter(Temp!=0)
 
 dbAppendTable(CookLog, "cook", cook)
 
@@ -96,7 +98,7 @@ dbAppendTable(SaladLog, "items", items)
 sitems=tbl(SaladLog, "items")%>%
   select(ID, Salad)%>%
   as_tibble()
-  
+
 
 salad=read_csv("data/SaladLog.salad.csv")%>%
   mutate(
@@ -106,7 +108,8 @@ salad=read_csv("data/SaladLog.salad.csv")%>%
   )%>%
   inner_join(., sitems, by=c(Salad="Salad"))%>%
   mutate(
-    Salad=ID.y,
+    SaladID=ID.y,
+    Salad=NULL,
     ID.y=NULL,
     ID=as.integer(ID.x),
     ID.x=NULL,
