@@ -191,25 +191,55 @@ includeUITable = function(
   )
 }
 
+#' Get the configuration
+#'
+#' This function gets the current configuration or sets it to a default value if it doesn't exist.
+#'
+#' @return A list representing the configuration.
 getConfig = function(){
-  opt = getOption("SSQLB:Config", NULL)
-  if(is.null(opt)){
-  	opt = yaml::read_yaml(system.file("default.yaml", package = "ShinySQLBrowser"))
-  	options("SSQLB:Config" = opt)
-  	return(opt)
-  }
-  else return(opt)
+	# Get the option "SSQLB:Config"
+	opt = getOption("SSQLB:Config", NULL)
+
+	# If the option is NULL (doesn't exist)
+	if(is.null(opt)){
+		# Read the default configuration from a YAML file in the ShinySQLBrowser package
+		opt = yaml::read_yaml(system.file("default.yaml", package = "ShinySQLBrowser"))
+
+		# Set the option "SSQLB:Config" to the default configuration
+		options("SSQLB:Config" = opt)
+
+		# Return the default configuration
+		return(opt)
+	}
+	# If the option exists, return it
+	else return(opt)
 }
 
+#' Set the configuration
+#'
+#' This function modifies the current configuration with new data.
+#'
+#' @param data A list representing the new configuration data.
+#' @return NULL
 setConfig = function(data){
+	# Get the current configuration
 	getConfig()|>
+		# Modify the current configuration with the new data
 		utils::modifyList(data)|>
+		# Set the option "SSQLB:Config" to the modified configuration
 		options("SSQLB:Config" = _)
 }
 
+#' Reset the configuration
+#'
+#' This function resets the configuration to its default state.
+#'
+#' @return NULL
 resetConnfig = function(){
+	# Set the option "SSQLB:Config" to NULL, effectively resetting it
 	options("SSQLB:Config" = NULL)
 }
+
 
 recGet = function(val, path){
 	if(length(path)==1)return(val[[path[1]]])

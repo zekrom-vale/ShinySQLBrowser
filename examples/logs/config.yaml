@@ -9,7 +9,8 @@ opt:
 tables:
     CookLog:
         tab:
-            title: NotCookLog # The title for the tabPanel
+            # The title for the tabPanel
+            title: NotCookLog
             # id will be fetched from outer
             value: null # The identifier for the tabPanel DON'T CHNAGE
             icon: null # The icon for the tabPanel
@@ -20,7 +21,9 @@ tables:
         opt: null
         rows:
             ID:
+                # The CSS width of the column.
                 width: 80px
+                # The HTML input/select tag or a constructed select from another SQL table.
                 input: <input type="number" disabled>
             Date:
                 width: 120px
@@ -28,17 +31,18 @@ tables:
                 width: 120px
             ItemID:
                 width: 240px
-                input: 
-                    table: items
-                    key: ID
-                    val: Item
+                input: # A constructed select from another SQL table.
+                    table: items # Table name
+                    key: ID # Key column
+                    val: Item # Value column
+                # A JavaScript function to format the values.
                 format: x=>($("#Cook-ItemID").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]
             Temp:
                 width: 100px
             Person:
                 width: 140px
                 input:
-                    con: Work # Passed through get()
+                    con: Work # Different connection Passed through get()
                     table: People
                     key: ID
                     val: Name
@@ -46,8 +50,9 @@ tables:
             Comment:
                 width: 300px
         js: null
-        tbl: cookFilter # Passed through get() local function
-        keys: ID
+        # The local function used to filter the table. Passed through get() local function
+        tbl: cookFilter
+        keys: ID # The primary key(s) of the table.
 
 
     CookItems:

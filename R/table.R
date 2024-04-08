@@ -80,29 +80,26 @@ methods::setClass(
   )
 );
 
-#' Pull class of columns
-#'
-#' @description
-#' Used in \code{\link{mutate}} to obtain the class of the column.
-#' Vectorised form of \code{class(pull(.data, var))}
-#'
-#' @param .data The table to pull from
-#' @param var The column to pull
-pullclass = Vectorize(
-  function(.data, var)paste(class(dplyr::pull(.data, var)), collapse = " "),
-  vectorize.args = "var",
-  SIMPLIFY = F
-)
-
 #' Create a UITable object for Database display and modification
 #'
+#' This function creates a new UITable object. It takes several parameters representing
+#' different aspects of the table, such as the connection, table name, column types, styles,
+#' input tags, JavaScript value, function to access the table, primary keys, auto increment
+#' setting, and CSS. It returns a new UITable object.
+#'
 #' @param con A \code{\link{pool}} connection
-#' @param name The tale name to connect to
+#' @param name The table name to connect to
+#' @param id The HTML table id, defaults to the name of the pool argument
 #' @param types A list of the types of the columns, must name the columns
 #' @param opt A list of styles
 #' @param input A list of HTML input tags to override \code{typemap}
-#'
-#' @returns A new \code{\link{UITable}} object
+#' @param js The JS value to access, defaults to \code{UITable.{id}}
+#' @param tbl The function to access the tbl, defaults to \code{dplyr::tbl}
+#' @param keys The primary keys in a list separated by \code{|,;:}, defaults to an empty string
+#' @param autoinc Does the first primary key use \code{AUTO_INCREMENT}?, defaults to TRUE
+#' @param css Any additional CSS, defaults to an empty string
+#' @return A new \code{\link{UITable}} object
+#' @export
 UITable = function(
     con,
     name,
@@ -169,6 +166,20 @@ UITable = function(
   }
   this
 };
+
+#' Pull class of columns
+#'
+#' @description
+#' Used in \code{\link{mutate}} to obtain the class of the column.
+#' Vectorised form of \code{class(pull(.data, var))}
+#'
+#' @param .data The table to pull from
+#' @param var The column to pull
+pullclass = Vectorize(
+	function(.data, var)paste(class(dplyr::pull(.data, var)), collapse = " "),
+	vectorize.args = "var",
+	SIMPLIFY = FALSE
+)
 
 
 #' Convert a tibble or tbl to a HTML table

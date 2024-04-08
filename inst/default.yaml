@@ -12,8 +12,8 @@
 # Note: name should not be used for anything as it is the SQL table connected, use id instead
 
 opt:
-  td: # Cells
-    class: ''
+  td: # This key is used for configuring the cells of a table
+    class: '' #  This is a CSS class that will be applied to all cells.
     collapse: ' '
     glue: |- # Critical keys class={{this@id}}-{col}, data-col="{{this@id}}-{col}", data-val="{x}"
       <td
@@ -26,6 +26,7 @@ opt:
       class="{{this@id}}-{col} {{this@opt$td$class}}"
       data-col="{{this@id}}-{col}">
       </td>
+    # Buttons to do actions
     remove:  # The remove button 
       text: |- # Critical keys class="remove"
         <button type="button" class="remove btn btn-danger" aria-label="Remove">
@@ -62,16 +63,16 @@ opt:
     glue: |- # Critical keys row; Remove this@opt$td$*$glue to remove commit, discard, or remove
       <tr class="{{this@opt$tr$class}}">
       {row}
-      {{this@opt$td$commit$glue}}
-      {{this@opt$td$discard$glue}}
-      {{this@opt$td$remove$glue}}
+      <!-- Commit button -->{{this@opt$td$commit$glue}}
+      <!-- Discard button -->{{this@opt$td$discard$glue}}
+      <!-- Remove button -->{{this@opt$td$remove$glue}}
       </tr>
     templateglue: |- # Critical keys template class=new-tr; Remove this@opt$td$*$glue to remove commit, discard, or remove
       <tr class="{{this@opt$tr$class}} new-tr">
       {template}
-      {{this@opt$td$commit$glue}}
-      {{this@opt$td$discard$glue}}
-      {{this@opt$td$remove$glue}}
+      <!-- Commit button -->{{this@opt$td$commit$glue}}
+      <!-- Discard button -->{{this@opt$td$discard$glue}}
+      <!-- Remove button -->{{this@opt$td$remove$glue}}
       </tr>
   th: # Headers
     class: ''

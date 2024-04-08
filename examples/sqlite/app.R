@@ -37,5 +37,5 @@ server = function(input, output, session) {
 	})
 }
 
-# Run the this integrated applicatopn
+# Run the this integrated application
 shinyApp(ui = ui, server = server)

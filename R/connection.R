@@ -43,32 +43,21 @@ procWhere = function(where, con, .comp = "==", .op = "and", .NAisNULL = TRUE){
 
     # UNTRUSTED op
     op = switch(op,
-      "lt" = "<",
-      "<" = "<",
-
-      "gt" = ">",
-      ">" = ">",
-
-      "ge" = ">=",
-      ">=" = ">=",
-      "=>" = ">=",
-
-      "le" = "<=",
-      "<=" = "<=",
-      "=<" = "<=",
-
-      "ne" = "<>",
-      "!=" = "<>",
-      "<>" = "<>",
-
-      "eq" = "=",
-      "==" = "=",
-      "=" = "=",
-      "="
+		"lt" = "<",
+		"gt" = ">",
+		"ge" = ">=",
+		"le" = "<=",
+		"!=" = "<>",
+		"ne" = "<>",
+		"eq" = "=",
+		# Default case: return the input as is
+		op
     )
+    if(!(res %in% c("<", ">", ">=", "<=", "=>", "=<", "<>", "="))) {
+    	op = "="
+    }
     # UNTRUSTED val
-    if(is.null(val))val = ""
-    if(is.na(val))val = ""
+    if(is.null(val) || is.na(val))val = ""
     val = DBI::dbQuoteLiteral(con, val)
     if(val=="''"&&.NAisNULL)val = "NULL"
 

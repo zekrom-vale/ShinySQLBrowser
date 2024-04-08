@@ -1,9 +1,24 @@
+#' Apply a function recursively to a list
+#'
+#' This function applies a given function `func` to each element in a list `l`.
+#' If an element is a list itself, the function is applied recursively to each of its elements.
+#'
+#' @param l A list to which the function will be applied.
+#' @param func A function that takes two arguments: an element from the list and its name.
+#' @return A list with the function applied to each element.
 recursivefor = function(l, func){
-  for(i in names(l)){
-    if(typeof(l[[i]])=="list")l[[i]] = recursivefor(l[[i]], func)
-    else l[[i]]=func(l[[i]], i)
-  }
-  l
+	# Loop over the names of the list
+	for(i in names(l)){
+		# If the current element is a list
+		if(typeof(l[[i]])=="list")
+			# Apply the function recursively to the list
+			l[[i]] = recursivefor(l[[i]], func)
+		else
+			# Apply the function to the current element
+			l[[i]]=func(l[[i]], i)
+	}
+	# Return the modified list
+	l
 }
 
 #'Returns the first element that is not NULL
