@@ -166,10 +166,10 @@ includeUITable = function(
     generateFormat = TRUE
   ){
   shiny::div(
-  	htmltools::includeScript(system.file("tbl.js", package = "ShinySQLBrowser")),
-  	htmltools::includeScript(system.file("connection.js", package = "ShinySQLBrowser")),
-  	`if`(is.null(jqueryCSS), NULL, htmltools::includeCSS(jqueryCSS)),
-  	`if`(is.null(jqueryJS), NULL, htmltools::includeScript(jqueryJS)),
+  	htmltools::tags$script(src = system.file("tbl.js", package = "ShinySQLBrowser")),
+  	htmltools::tags$script(src = system.file("connection.js", package = "ShinySQLBrowser")),
+  	`if`(is.null(jqueryCSS), NULL, htmltools::tags$link(rel = "stylesheet", type = "text/css", href = jqueryCSS)),
+  	`if`(is.null(jqueryJS), NULL, htmltools::tags$script(src = jqueryJS)),
   	`if`(
   		generateFormat,
   		htmltools::tags$script(htmltools::HTML(genFormat(container@data))),
