@@ -17,7 +17,7 @@ mtcars|>
 	mutate(car = rownames(mtcars), id = row_number(car))|>
 	dbWriteTable(mydb, "mtcars", value = _)
 
-data = yaml::read_yaml("config.yaml")
+data = yaml::read_yaml(system.file("examples", "sqlite", "config.yaml", package = "ShinySQLBrowser"))
 container = UIContainer(data$tables, data)
 
 # Define UI for application that creates a user interface for SQL tables
