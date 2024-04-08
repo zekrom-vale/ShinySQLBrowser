@@ -40,6 +40,27 @@ retna = function(...){
   }
 }
 
+#' Returns the first element that is not NULL or NA
+#'
+#' @param ... A list of elements
+#' @return The first element that is not NULL or NA. If all elements are NULL or NA, returns NULL.
+retVal = function(...){
+	# Convert the arguments to a list
+	l = list(...)
+
+	# Loop over the elements in the list
+	for(i in l){
+		# If the current element is not NULL and not NA
+		if(!is.null(i) && !is.na(i))
+			# Return the current element
+			return(i)
+	}
+
+	# If all elements are NULL or NA, return NULL
+	return(NULL)
+}
+
+
 #' Vectorize `[` Ie x[i]
 #' @param lhs The vector to access
 #' @param rhs A vector of things to access
