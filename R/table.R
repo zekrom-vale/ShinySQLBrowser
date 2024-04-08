@@ -239,11 +239,15 @@ toTable = function(this){
       )(con, input$table)|>
         dplyr::select(retnn(input$key, 1), retnn(input$val, 2))|>
         dplyr::as_tibble()|>
-        dplyr::rename(key = 1, val = 2)
+        dplyr::rename(key = 1, val = 2)|>
+      	dplyr::mutate(
+      		key=htmltools::htmlEscape(key, attribute = TRUE),
+      		value=htmltools::htmlEscape(value, attribute = TRUE),
+      	)
 
       sel = tb|>
         dplyr::mutate(
-          x = glue::glue('<option value="{key}">{val}</option>') # TODO: Fix if <>'" are in data
+          x = glue::glue('<option value="{key}">{val}</option>')
         )|>
         dplyr::summarise(paste0(x, collapse = ""))|>
         dplyr::pull()
