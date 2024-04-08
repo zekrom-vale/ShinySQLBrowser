@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `cook` (
   KEY `FK_cook_work.people_i` (`Person`) USING BTREE,
   CONSTRAINT `FK__items` FOREIGN KEY (`ItemID`) REFERENCES `items` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_cook_work.people` FOREIGN KEY (`Person`) REFERENCES `work`.`people` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=188 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Data exporting was unselected.
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   PRIMARY KEY (`ID`),
   KEY `FK_items_methods` (`Method`),
   CONSTRAINT `FK_items_methods` FOREIGN KEY (`Method`) REFERENCES `methods` (`ID`) ON DELETE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Data exporting was unselected.
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `methods` (
   `Method` varchar(20) NOT NULL,
   `Comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Data exporting was unselected.
 
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `salad` (
   CONSTRAINT `FK_salad_Work.people` FOREIGN KEY (`Person`) REFERENCES `work`.`people` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_salad_items` FOREIGN KEY (`SaladID`) REFERENCES `items` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `ValidExpires` CHECK (`Date` < `Expires`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Data exporting was unselected.
 
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `people` (
   `Active` tinyint(1) NOT NULL DEFAULT 0,
   `Comment` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Data exporting was unselected.
 
