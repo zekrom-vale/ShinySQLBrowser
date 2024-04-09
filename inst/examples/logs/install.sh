@@ -15,12 +15,12 @@ sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_
 
 sudo apt install --no-install-recommends r-base -y
 sudo add-apt-repository ppa:c2d4u.team/c2d4u4.0+
-sudo apt install --no-install-recommends r-cran-tidyverse r-cran-shiny r-cran-shinyjs r-cran-bsicons r-cran-devtools r-cran-odbc r-cran-pool r-cran-yaml
+sudo apt install --no-install-recommends r-cran-tidyverse r-cran-shiny r-cran-shinyjs r-cran-bsicons r-cran-devtools r-cran-odbc r-cran-pool r-cran-yaml r-cran-rmariadb
 
 sudo /bin/usr/R -e 'devtools::install_github("https://github.com/zekrom-vale/ShinySQLBrowser")'
 
 # Rstudio
-curl https://download1.rstudio.org/electron/jammy/amd64/rstudio-2023.12.1-402-amd64.deb rstudio.deb
+curl https://download1.rstudio.org/electron/jammy/amd64/rstudio-2023.12.1-402-amd64.deb --output rstudio.deb
 sudo dpkg -i rstudio.deb
 
 ###############
