@@ -162,7 +162,7 @@ tables:
             Comment:
                 width: 300px
         js: null
-        tbl: null # Passed through get() local function
+        tbl: saladFilter # Passed through get() local function
         keys: ID
         
     ExpiredLog:

@@ -104,6 +104,12 @@ expiredFilter = function(con, name){
 		dplyr::filter(Expires<=today, Ack==0)
 }
 
+saladFilter = function(con, name){
+	dplyr::tbl(con, name)|>
+		filter(Date >= lubridate::today(Sys.timezone())-7)|>
+		as_tibble()
+}
+
 # data = yaml::read_yaml(system.file("examples", "logs", "config.yaml", package = "ShinySQLBrowser"))
 data = yaml::read_yaml("config.yaml")
 container = UIContainer(data$tables, data)
