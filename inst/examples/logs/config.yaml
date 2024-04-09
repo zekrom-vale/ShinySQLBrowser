@@ -43,7 +43,7 @@ tables:
                 width: 140px
                 input:
                     con: Work # Different connection Passed through get()
-                    table: People
+                    table: people
                     key: ID
                     val: Name
                 format: x=>($("#Cook-Person").data("vals").match(new RegExp(`'${x}':'(.+?)'`))||[0,"NULL"])[1]

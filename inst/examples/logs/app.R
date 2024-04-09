@@ -92,13 +92,20 @@ cookFilter = function(con, name){
 }
 
 expiredFilter = function(con, name){
+	# pool::dbExecute("UPDATE `salad` SET `Ack` = 1 WHERE `Ack` = 0 AND `SaladID` = (NEW.`SaladID`) AND `ID` <> (NEW.`ID`);")
 	today = lubridate::today(Sys.timezone())
 	dplyr::tbl(con, name)|>
-		filter(Expires<=today, Ack==0)|>
-		as_tibble()
+		#dplyr::tbl(SaladLog, "salad")|>
+		as_tibble()|>
+		group_by(SaladID)|>
+		arrange(desc(Expires), desc(Date), desc(Time))|>
+		slice(1)|>
+		ungroup()|>
+		dplyr::filter(Expires<=today, Ack==0)
 }
 
-data = yaml::read_yaml(system.file("examples", "logs", "config.yaml", package = "ShinySQLBrowser"))
+# data = yaml::read_yaml(system.file("examples", "logs", "config.yaml", package = "ShinySQLBrowser"))
+data = yaml::read_yaml("config.yaml")
 container = UIContainer(data$tables, data)
 
 
