@@ -62,21 +62,6 @@ user = 'root'
 password = "RayLVM"
 
 
-# If table don't exist
-if(FALSE){
-	# Create a detached connection
-	detached <- dbPool(
-		drv = RMariaDB::MariaDB(),
-		password = password,
-		user = user
-	)
-	# Execute the file
-	dbExecute(detached, read_file("tableData.sql"))
-	# Close the connection
-	poolClose(detached)
-}
-
-
 CookLog <- dbPool(
   drv = RMariaDB::MariaDB(),
   password = password,
